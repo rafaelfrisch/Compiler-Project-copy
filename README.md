@@ -1,7 +1,15 @@
 # Compiler-Project
 
 ## Lexical Analyser
+Run this command:
+
+```
+./compile.sh
+```
+
+Or run each compiled file separately:
 ### Generate Flex
+
 ```
 flex cminus.l
 ```
