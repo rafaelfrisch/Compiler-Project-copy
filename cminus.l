@@ -50,6 +50,7 @@ whitespace  [ \t]+
 {identifier}    {return ID;}
 {newline}       {lineno++;}
 {whitespace}    {/* skip whitespace */}
+.               {return ERROR;}
 %%
 TokenType getToken(void)
 { static int firstTime = TRUE;
