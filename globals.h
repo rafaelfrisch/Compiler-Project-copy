@@ -35,7 +35,7 @@ typedef enum
     /* special symbols */
     EQ,LT,GT,GEQ,LEQ,EQEQ,INEQ,PLUS,COMMA,MINUS,
     TIMES,OVER,LPAREN,RPAREN,LBRACKETS,RBRACKETS,
-    LCBRACES,RCBRACES,SEMI,LCOMMENT,RCOMMENT
+    LCBRACES,RCBRACES,SEMI
    } TokenType;
 
 extern FILE* source; /* source code text file */

@@ -44,12 +44,29 @@ whitespace  [ \t]+
 "{"             {return LCBRACES;}
 "}"             {return RCBRACES;}
 ";"             {return SEMI;}
-"/*"            {return LCOMMENT;}
-"*/"            {return RCOMMENT;}
 {number}        {return NUM;}
 {identifier}    {return ID;}
 {newline}       {lineno++;}
 {whitespace}    {/* skip whitespace */}
+"/*"            { char c;
+                  int end_loop = 0;
+                  int found_asterisk = 0;
+                  do
+                  { c = input();
+                    if (c == EOF) break;
+                    if (c == '\n') lineno++;
+                    if (found_asterisk == 1) {
+                      if (c == '/') {
+                        end_loop = 1;
+                      } else {
+                        found_asterisk = 0;
+                      }
+                    } 
+                    if (c == '*') {
+                      found_asterisk = 1;
+                    }
+                  } while (end_loop == 0);
+                }
 .               {return ERROR;}
 %%
 TokenType getToken(void)

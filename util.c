@@ -42,8 +42,6 @@ void printToken( TokenType token, const char* tokenString )
     case LCBRACES: fprintf(listing,"{\n"); break;
     case RCBRACES: fprintf(listing,"}\n"); break;
     case SEMI: fprintf(listing,";\n"); break;   
-    case LCOMMENT: fprintf(listing,"/*\n"); break;
-    case RCOMMENT: fprintf(listing,"*/\n"); break;
     case ENDFILE: fprintf(listing,"EOF\n"); break;
     case NUM:
       fprintf(listing,
