@@ -3,5 +3,7 @@
 !*.*
 *.o
 *.yy.c
-TinyFlex
 results
+TinyFlex
+TinyBison
+Bison-Teste
