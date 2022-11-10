@@ -4,8 +4,11 @@
 Run this command:
 
 ```
-./compile.sh
+./lexicalanalyser.sh
 ```
+
+Results will be stored on results folder
+
 
 Or run each compiled file separately:
 ### Generate Flex
@@ -29,6 +32,8 @@ gcc -o cminus *.o -lfl
 ### Run test Programs
 
 ```
-./cminus mdc.c
-./cminus sort.c
+mkdir -p results
+./cminus testfiles/mdc.c > results/mdc.txt
+./cminus testfiles/sort.c > results/sort.txt
 ```
+Results will be stored on results folder

@@ -2,7 +2,6 @@
 !/**/
 !*.*
 *.o
-original
 *.yy.c
-mdc.txt
-sort.txt
+TinyFlex
+results
