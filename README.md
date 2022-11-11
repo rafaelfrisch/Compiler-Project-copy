@@ -37,3 +37,8 @@ mkdir -p results
 ./cminus testfiles/sort.c > results/sort.txt
 ```
 Results will be stored on results folder
+
+## syntatic analyser
+```
+./syntaticanalyser.sh
+```

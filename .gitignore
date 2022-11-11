@@ -3,7 +3,10 @@
 !*.*
 *.o
 *.yy.c
+*.tab.c
+*.tab.h
 results
+original
 TinyFlex
 TinyBison
 Bison-Teste
