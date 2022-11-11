@@ -26,7 +26,7 @@ gcc -c lex.yy.c main.c util.c
 ### Create Lexical Analyser:
 
 ```
-gcc -o cminus *.o -lfl
+gcc -o cminus *.o -ll
 ```
 
 ### Run test Programs
