@@ -27,91 +27,98 @@ int yyerror(char *s);
 LPAREN RPAREN LBRACKETS RBRACKETS LCBRACES RCBRACES SEMI
 %token ERROR 
 
-%% /* Grammar for TINY */
+%%
 
-program     : stmt_seq
-                 { savedTree = $1;} 
-            ;
-stmt_seq    : stmt_seq SEMI stmt
-                 { YYSTYPE t = $1;
-                   if (t != NULL)
-                   { while (t->sibling != NULL)
-                        t = t->sibling;
-                     t->sibling = $3;
-                     $$ = $1; }
-                     else $$ = $3;
-                 }
-            | stmt  { $$ = $1; }
-            ;
-stmt        : if_stmt { $$ = $1; }
-            | error  { $$ = NULL; }
-            ;
-if_stmt     : IF LPAREN exp RPAREN LCBRACES stmt_seq RCBRACES
-                 { $$ = newStmtNode(IfK);
-                   $$->child[0] = $2;
-                   $$->child[1] = $4;
-                 }
-            | IF LPAREN exp RPAREN LCBRACES stmt_seq RCBRACES ELSE LCBRACES stmt_seq RCBRACES
-                 { $$ = newStmtNode(IfK);
-                   $$->child[0] = $2;
-                   $$->child[1] = $4;
-                   $$->child[2] = $6;
-                 }
-            ;
-exp         : simple_exp LT simple_exp 
-                 { $$ = newExpNode(OpK);
-                   $$->child[0] = $1;
-                   $$->child[1] = $3;
-                   $$->attr.op = LT;
-                 }
-            | simple_exp EQ simple_exp
-                 { $$ = newExpNode(OpK);
-                   $$->child[0] = $1;
-                   $$->child[1] = $3;
-                   $$->attr.op = EQ;
-                 }
-            | simple_exp { $$ = $1; }
-            ;
-simple_exp  : simple_exp PLUS term 
-                 { $$ = newExpNode(OpK);
-                   $$->child[0] = $1;
-                   $$->child[1] = $3;
-                   $$->attr.op = PLUS;
-                 }
-            | simple_exp MINUS term
-                 { $$ = newExpNode(OpK);
-                   $$->child[0] = $1;
-                   $$->child[1] = $3;
-                   $$->attr.op = MINUS;
-                 } 
-            | term { $$ = $1; }
-            ;
-term        : term TIMES factor 
-                 { $$ = newExpNode(OpK);
-                   $$->child[0] = $1;
-                   $$->child[1] = $3;
-                   $$->attr.op = TIMES;
-                 }
-            | term OVER factor
-                 { $$ = newExpNode(OpK);
-                   $$->child[0] = $1;
-                   $$->child[1] = $3;
-                   $$->attr.op = OVER;
-                 }
-            | factor { $$ = $1; }
-            ;
-factor      : LPAREN exp RPAREN
-                 { $$ = $2; }
-            | NUM
-                 { $$ = newExpNode(ConstK);
-                   $$->attr.val = atoi(tokenString);
-                 }
-            | ID { $$ = newExpNode(IdK);
-                   $$->attr.name =
-                         copyString(tokenString);
-                 }
-            | error { $$ = NULL; }
-            ;
+program     : decl_list   {  };
+
+decl_list   : decl_list decl {   };
+            | decl {  };
+
+decl        : var_decl {  };
+            | func_decl {  };
+
+var_decl    : type_spec ID SEMI {  };
+            | type_spec ID LBRACKETS NUM RBRACKETS SEMI {  };
+
+type_spec   : INT {  };
+            | VOID {  };
+
+func_decl   : type_spec ID LPAREN params RPAREN comp_decl {  };
+
+params      : param_list {  };
+            | VOID {  };
+
+param_list  : param_list COMMA param {  };
+            | param {  };
+
+param       : type_spec ID {  };
+            | type_spec ID LBRACKETS RBRACKETS {  };
+
+comp_decl   : LCBRACES local_decl stat_list RCBRACES {  };
+
+local_decl  : local_decl var_decl {  };
+            | %empty {  };
+
+stat_list   : stat_list stat {  };
+            | %empty {  };
+
+stat        : exp_decl {  };
+            | comp_decl {  };
+            | selec_decl {  };
+            | iter_decl {  };
+            | ret_decl {  };            
+
+exp_decl    : exp SEMI {  };
+            | SEMI {  };
+
+selec_decl  : IF LPAREN exp RPAREN stat {  };
+            | IF LPAREN exp RPAREN stat ELSE stat {  };
+
+iter_decl   : WHILE LPAREN exp RPAREN stat { };
+
+ret_decl    : RETURN SEMI {  };
+            | RETURN exp SEMI {  };
+
+exp         : var EQ exp {  };
+            | simple_exp {  };
+
+var         : ID {  };
+            | ID LBRACKETS exp RBRACKETS {  };
+
+simple_exp  : soma_exp relac soma_exp {  };
+            | soma_exp {  };
+
+relac       : LEQ   {  };
+            | LT    {  };
+            | GT    {  };           
+            | GEQ   {  };
+            | EQEQ  {  };
+            | INEQ  {  };
+
+soma_exp    : soma_exp soma term {  };
+            | term {  };
+
+soma        : PLUS {  };
+            | MINUS {  };
+
+term        : term mult fator { };
+            | fator { };
+
+mult        : TIMES {  };
+            | OVER {  };
+
+fator       : LPAREN exp RPAREN {  }; 
+            | var {  };
+            | ativ {  };
+            | NUM {  };
+
+ativ        : ID LPAREN args RPAREN {  }; 
+
+args        : arg_list {  };
+            | %empty {  };
+
+arg_list    : arg_list COMMA exp {  };
+            | exp  {  };
 
 %%
 
