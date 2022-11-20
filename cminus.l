@@ -25,6 +25,7 @@ whitespace  [ \t]+
 "return"        {return RETURN;}
 "void"          {return VOID;}
 "while"         {return WHILE;}
+""              {return EMPTY;}
 "="             {return EQ;}
 "<"             {return LT;}
 ">"             {return GT;}
@@ -61,7 +62,7 @@ whitespace  [ \t]+
                       } else {
                         found_asterisk = 0;
                       }
-                    } 
+                    }
                     if (c == '*') {
                       found_asterisk = 1;
                     }

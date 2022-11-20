@@ -50,7 +50,7 @@
 /* Yacc/Bison generates its own integer values
  * for tokens
  */
-typedef int TokenType; 
+typedef int TokenType;
 
 extern FILE* source; /* source code text file */
 extern FILE* listing; /* listing output text file */
@@ -63,7 +63,7 @@ extern int lineno; /* source line number for listing */
 /**************************************************/
 
 typedef enum {StmtK,ExpK} NodeKind;
-typedef enum {IfK,RepeatK,AssignK,ReadK,WriteK} StmtKind;
+typedef enum {IfK,RepeatK,AssignK,ReadK,WriteK,ActivK} StmtKind;
 typedef enum {OpK,ConstK,IdK} ExpKind;
 
 /* ExpType is used for type checking */
@@ -116,5 +116,5 @@ extern int TraceAnalyze;
 extern int TraceCode;
 
 /* Error = TRUE prevents further passes if an error occurs */
-extern int Error; 
+extern int Error;
 #endif

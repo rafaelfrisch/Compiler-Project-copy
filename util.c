@@ -9,7 +9,7 @@
 #include "globals.h"
 #include "util.h"
 
-/* Procedure printToken prints a token 
+/* Procedure printToken prints a token
  * and its lexeme to the listing file
  */
 void printToken( TokenType token, const char* tokenString )
@@ -19,6 +19,7 @@ void printToken( TokenType token, const char* tokenString )
     case INT:
     case RETURN:
     case VOID:
+    case EMPTY:
     case WHILE:
     case EQ: fprintf(listing,"=\n"); break;
     case LT: fprintf(listing,"<\n"); break;
@@ -38,7 +39,7 @@ void printToken( TokenType token, const char* tokenString )
     case RBRACKETS: fprintf(listing,"]\n"); break;
     case LCBRACES: fprintf(listing,"{\n"); break;
     case RCBRACES: fprintf(listing,"}\n"); break;
-    case SEMI: fprintf(listing,";\n"); break;   
+    case SEMI: fprintf(listing,";\n"); break;
     case ENDFILE: fprintf(listing,"EOF\n"); break;
     case NUM:
       fprintf(listing,
@@ -61,7 +62,8 @@ void printToken( TokenType token, const char* tokenString )
  * node for syntax tree construction
  */
 TreeNode * newStmtNode(StmtKind kind)
-{ TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
+{
+  TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
   int i;
   if (t==NULL)
     fprintf(listing,"Out of memory error at line %d\n",lineno);
@@ -75,7 +77,12 @@ TreeNode * newStmtNode(StmtKind kind)
   return t;
 }
 
-/* Function newExpNode creates a new expression 
+/* Function newNode creates a new node
+ * for syntax tree construction
+ */
+
+
+/* Function newExpNode creates a new expression
  * node for syntax tree construction
  */
 TreeNode * newExpNode(ExpKind kind)
@@ -125,7 +132,7 @@ static void printSpaces(void)
     fprintf(listing," ");
 }
 
-/* procedure printTree prints a syntax tree to the 
+/* procedure printTree prints a syntax tree to the
  * listing file using indentation to indicate subtrees
  */
 void printTree( TreeNode * tree )
@@ -149,6 +156,9 @@ void printTree( TreeNode * tree )
           break;
         case WriteK:
           fprintf(listing,"Write\n");
+          break;
+        case ActivK:
+          fprintf(listing,"Function: %s\n", tree->attr.name);
           break;
         default:
           fprintf(listing,"Unknown ExpNode kind\n");
