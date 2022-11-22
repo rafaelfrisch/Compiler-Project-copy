@@ -41,7 +41,7 @@ decl_list    : decl_list decl {
                   while (t->sibling != NULL) {
                     t = t->sibling;
                   }
-                  $$->sibling = $2;
+                  t->sibling = $2;
                   $$ = $1;
                 } else { $$ = $2; }
             }
