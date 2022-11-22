@@ -1,6 +1,6 @@
 /****************************************************/
-/* File: tiny.y                                     */
-/* The TINY Yacc/Bison specification file           */
+/* File: cminus.y                                   */
+/* The CMINUS Yacc/Bison specification file         */
 /* Compiler Construction: Principles and Practice   */
 /* Kenneth C. Louden                                */
 /****************************************************/
