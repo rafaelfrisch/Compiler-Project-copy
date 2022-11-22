@@ -42,3 +42,8 @@ Results will be stored on results folder
 ```
 ./syntaticanalyser.sh
 ```
+
+## semantic analyser
+```
+./semanticanalyser.sh
+```
