@@ -1,7 +1,7 @@
 /****************************************************/
 /* File: globals.h                                  */
 /* Yacc/Bison Version                               */
-/* Global types and vars for TINY compiler          */
+/* Global types and vars for CMINUS compiler          */
 /* must come before other include files             */
 /* Compiler Construction: Principles and Practice   */
 /* Kenneth C. Louden                                */
@@ -50,7 +50,7 @@
 /* Yacc/Bison generates its own integer values
  * for tokens
  */
-typedef int TokenType; 
+typedef int TokenType;
 
 extern FILE* source; /* source code text file */
 extern FILE* listing; /* listing output text file */
@@ -63,7 +63,7 @@ extern int lineno; /* source line number for listing */
 /**************************************************/
 
 typedef enum {StmtK,ExpK} NodeKind;
-typedef enum {IfK,RepeatK,AssignK,ReadK,WriteK} StmtKind;
+typedef enum {IfK,RepeatK,AssignK,ReadK,WriteK,ActivK,DeclK, RetK} StmtKind;
 typedef enum {OpK,ConstK,IdK} ExpKind;
 
 /* ExpType is used for type checking */
@@ -116,5 +116,5 @@ extern int TraceAnalyze;
 extern int TraceCode;
 
 /* Error = TRUE prevents further passes if an error occurs */
-extern int Error; 
+extern int Error;
 #endif

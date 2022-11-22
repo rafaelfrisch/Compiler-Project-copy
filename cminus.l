@@ -11,6 +11,7 @@
 #include "scan.h"
 /* lexeme of identifier or reserved word */
 char tokenString[MAXTOKENLEN+1];
+char globalId[MAXTOKENLEN + 1];
 %}
 digit       [0-9]
 number      {digit}+
@@ -25,6 +26,7 @@ whitespace  [ \t]+
 "return"        {return RETURN;}
 "void"          {return VOID;}
 "while"         {return WHILE;}
+""              {return EMPTY;}
 "="             {return EQ;}
 "<"             {return LT;}
 ">"             {return GT;}
@@ -45,7 +47,7 @@ whitespace  [ \t]+
 "}"             {return RCBRACES;}
 ";"             {return SEMI;}
 {number}        {return NUM;}
-{identifier}    {return ID;}
+{identifier}    {strncpy(globalId, yytext, MAXTOKENLEN);return ID;}
 {newline}       {lineno++;}
 {whitespace}    {/* skip whitespace */}
 "/*"            { char c;
@@ -61,7 +63,7 @@ whitespace  [ \t]+
                       } else {
                         found_asterisk = 0;
                       }
-                    } 
+                    }
                     if (c == '*') {
                       found_asterisk = 1;
                     }
