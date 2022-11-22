@@ -160,6 +160,9 @@ void printTree( TreeNode * tree )
         case ActivK:
           fprintf(listing,"Function: %s\n", tree->attr.name);
           break;
+        case RetK:
+          fprintf(listing,"Return\n");
+          break;
         default:
           fprintf(listing,"Unknown ExpNode kind\n");
           break;

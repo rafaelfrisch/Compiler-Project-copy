@@ -23,7 +23,7 @@ whitespace  [ \t]+
 "if"            {return IF;}
 "else"          {return ELSE;}
 "int"           {return INT;}
-"return"        {strncpy(globalId, yytext, MAXTOKENLEN); return RETURN;}
+"return"        {return RETURN;}
 "void"          {return VOID;}
 "while"         {return WHILE;}
 ""              {return EMPTY;}

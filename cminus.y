@@ -150,7 +150,7 @@ stmt_list   : stmt_list stmt {
                   while (t->sibling != NULL) {
                     t = t->sibling;
                   }
-                  $$->sibling = $2;
+                  t->sibling = $2;
                   $$ = $1;
                 } else { $$ = $2; }
             }
@@ -183,31 +183,23 @@ iter_decl   : WHILE LPAREN exp RPAREN stmt {
                 $$->child[1] = $5;
             }
             ;
-rtrn_decl   : RETURN {
-                savedName = copyString(globalId);
-                savedLineNo = lineno; }
+rtrn_decl   : RETURN
               SEMI {
-                $$ = newExpNode(IdK);
-                $$->attr.name = savedName;
-                $$->lineno = savedLineNo;
+                $$ = newStmtNode(RetK);
             }
-            | RETURN {
-                savedName = copyString(globalId);
-                savedLineNo = lineno;  }
+            | RETURN
               exp SEMI {
-              $$ = newExpNode(IdK);
-              $$->child[0] = $3;
-              $$->attr.name = savedName;
-              $$->lineno = savedLineNo;
+              $$ = newStmtNode(RetK);
+              $$->child[0] = $2;
             }
             ;
 exp         : var EQ exp {
                 $$ = newStmtNode(AssignK);
+                $$->attr.name = $1->attr.name;
                 $$->child[0] = $1;
                 $$->child[1] = $3;
-                $$->attr.name = $1->attr.name;
               }
-            | simple_exp {  $$ = $1;  }
+            | simple_exp {  $$ = $1; }
             ;
 var         : ID {
                   $$ = newExpNode(IdK);
@@ -300,12 +292,13 @@ factor      : LPAREN exp RPAREN { $$ = $2; }
 activ       : ID {
                 savedName = copyString(globalId);
                 savedLineNo = lineno;
-              }
-              LPAREN args RPAREN {
                 $$ = newStmtNode(ActivK);
-                $$->child[0] = $4;
                 $$->attr.name = savedName;
                 $$->lineno = savedLineNo;
+              }
+              LPAREN args RPAREN {
+                $$ = $2;
+                $$->child[0] = $4;
             }
             ;
 args        : arg_list {
