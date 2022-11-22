@@ -20,7 +20,7 @@ void printToken( TokenType token, const char* tokenString )
     case RETURN:
     case VOID:
     case EMPTY:
-    case WHILE:
+    case WHILE: break;
     case EQ: fprintf(listing,"=\n"); break;
     case LT: fprintf(listing,"<\n"); break;
     case GT: fprintf(listing,">\n"); break;
