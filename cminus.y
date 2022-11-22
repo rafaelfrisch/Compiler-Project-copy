@@ -31,8 +31,8 @@ LPAREN RPAREN LBRACKETS RBRACKETS LCBRACES RCBRACES SEMI
 %% /* Grammar for Cminus */
 
 program     : decl_list
-                { savedTree = $1;
-                  printTree(savedTree);
+                { 
+                  savedTree = $1;
                 }
             ;
 decl_list    : decl_list decl {
