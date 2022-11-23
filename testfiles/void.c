@@ -1,5 +1,11 @@
+void fun (void) {
+
+}
+
 void main(void) {
-  void a;
-  a =2;
-  a =5;
+  int a;
+  int b;
+  a = fun();
+  
+  b = novfun();
 }

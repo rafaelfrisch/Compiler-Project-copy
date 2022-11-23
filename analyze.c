@@ -141,6 +141,14 @@ static void checkNode(TreeNode * t)
           if (t->child[1]->type == Integer)
             typeError(t->child[1],"repeat test is not Boolean");
           break;
+        case ActivK:
+          if (st_lookup(t->attr.name) == -1) {
+            if (strcmp(t->attr.name, "input") == 0 || strcmp(t->attr.name, "output") == 0) {
+              break;
+            }
+            typeError(t, "chamada de função não declarada");
+          }
+          break;
         default:
           break;
       }
