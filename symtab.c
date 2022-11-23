@@ -49,6 +49,7 @@ typedef struct BucketListRec
    { char * name;
      LineList lines;
      int memloc ; /* memory location for variable */
+     int decl;
      struct BucketListRec * next;
    } * BucketList;
 
@@ -60,7 +61,7 @@ static BucketList hashTable[SIZE];
  * loc = memory location is inserted only the
  * first time, otherwise ignored
  */
-void st_insert( char * name, int lineno, int loc )
+void st_insert( char * name, int lineno, int loc, int decl )
 { int h = hash(name);
   BucketList l =  hashTable[h];
   while ((l != NULL) && (strcmp(name,l->name) != 0))
@@ -71,6 +72,7 @@ void st_insert( char * name, int lineno, int loc )
     l->lines = (LineList) malloc(sizeof(struct LineListRec));
     l->lines->lineno = lineno;
     l->memloc = loc;
+    l->decl = decl;
     l->lines->next = NULL;
     l->next = hashTable[h];
     hashTable[h] = l; }
@@ -99,10 +101,17 @@ int st_lookup ( char * name )
  * listing of the symbol table contents 
  * to the listing file
  */
+char *convertDeclToMessage (int decl) {
+  if (decl == 1) {
+    return "VAR";
+  }
+  return " ";
+}
+
 void printSymTab(FILE * listing)
 { int i;
-  fprintf(listing,"Variable Name  Location   Line Numbers\n");
-  fprintf(listing,"-------------  --------   ------------\n");
+  fprintf(listing,"Variable Name Location Tipo ID Line Numbers\n");
+  fprintf(listing,"------------- -------- ------- ------------\n");
   for (i=0;i<SIZE;++i)
   { if (hashTable[i] != NULL)
     { BucketList l = hashTable[i];
@@ -110,6 +119,7 @@ void printSymTab(FILE * listing)
       { LineList t = l->lines;
         fprintf(listing,"%-14s ",l->name);
         fprintf(listing,"%-8d  ",l->memloc);
+        fprintf(listing,"%-8s  ",convertDeclToMessage(l->decl));
         while (t != NULL)
         { fprintf(listing,"%4d ",t->lineno);
           t = t->next;
