@@ -10,7 +10,10 @@
 /* set NO_PARSE to TRUE to get a scanner-only compiler */
 #define NO_PARSE FALSE
 /* set NO_ANALYZE to TRUE to get a parser-only compiler */
+// semantic
 #define NO_ANALYZE FALSE
+// // syntatic
+// #define NO_ANALYZE TRUE
 
 /* set NO_CODE to TRUE to get a compiler that does not
  * generate code
@@ -37,11 +40,20 @@ FILE * listing;
 FILE * code;
 
 /* allocate and set tracing flags */
+// Semantic
 int EchoSource = FALSE;
 int TraceScan = FALSE;
 int TraceParse = FALSE;
 int TraceAnalyze = TRUE;
 int TraceCode = FALSE;
+
+// // Syntax
+// int EchoSource = FALSE;
+// int TraceScan = FALSE;
+// int TraceParse = TRUE;
+// int TraceAnalyze = FALSE;
+// int TraceCode = FALSE;
+
 
 int Error = FALSE;
 
