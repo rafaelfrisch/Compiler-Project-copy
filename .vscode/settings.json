@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "globals.h": "c",
+        "symtab.h": "c",
+        "code.h": "c"
+    }
+}
