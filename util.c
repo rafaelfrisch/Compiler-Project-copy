@@ -169,6 +169,15 @@ void printTree( TreeNode * tree )
         case TypeK:
           fprintf(listing,"Type: %s\n", tree->attr.name);
           break;
+        case FuncDeclK:
+          fprintf(listing,"FuncDecl: %s\n", tree->attr.name);
+          break;
+        case VarDeclK:
+          fprintf(listing,"VarDecl: %s\n", tree->attr.name);
+          break;
+        case ArrDeclK:
+          fprintf(listing,"ArrDecl: %s\n", tree->attr.name);
+          break;
         default:
           fprintf(listing,"Unknown ExpNode kind\n");
           break;

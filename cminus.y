@@ -52,7 +52,7 @@ decl        : var_decl { $$ = $1; }
             ;
 var_decl    : type_spec ID { savedName = copyString(globalId); savedLineNo = lineno;} SEMI {
                 $$ = $1;
-                $$->child[0] = newExpNode(IdK);
+                $$->child[0] = newStmtNode(VarDeclK);
                 $$->child[0]->attr.name = savedName;
                 $$->child[0]->lineno = savedLineNo;
               }
@@ -62,7 +62,7 @@ var_decl    : type_spec ID { savedName = copyString(globalId); savedLineNo = lin
               }
               LBRACKETS NUM { savedNum = atoi(tokenString); } RBRACKETS SEMI  {
                 $$ = $1;
-                $$->child[0] = newExpNode(IdK);
+                $$->child[0] = newStmtNode(ArrDeclK);
                 $$->child[0]->attr.name = savedName;
                 $$->child[0]->lineno = savedLineNo;
                 $$->child[0]->child[0] = newExpNode(ConstK);
@@ -82,7 +82,7 @@ fun_decl    : type_spec ID {
                   savedName = copyString(globalId);
                   savedLineNo = lineno;
                   $$ = $1;
-                  $$->child[0] = newExpNode(IdK);
+                  $$->child[0] = newStmtNode(FuncDeclK);
                   $$->child[0]->attr.name = savedName;
                   $$->child[0]->lineno = savedLineNo;
                 } LPAREN params RPAREN comp_decl {
@@ -110,13 +110,13 @@ param_list  : param_list COMMA param {
             ;
 param       : type_spec ID { savedName = copyString(globalId); savedLineNo = lineno; } {
                 $$ = $1;
-                $$->child[0] = newExpNode(IdK);
+                $$->child[0] = newStmtNode(VarDeclK);
                 $$->child[0]->attr.name = savedName;
                 $$->child[0]->lineno = lineno;
             }
             | type_spec ID { savedName = copyString(globalId); savedLineNo = lineno; }  LBRACKETS RBRACKETS {
                 $$ = $1;
-                $$->child[0] = newExpNode(IdK);
+                $$->child[0] = newStmtNode(ArrDeclK);
                 $$->child[0]->attr.name = savedName;
                 $$->child[0]->lineno = lineno;
             }
