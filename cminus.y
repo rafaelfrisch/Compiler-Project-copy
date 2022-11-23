@@ -70,11 +70,11 @@ var_decl    : type_spec ID { savedName = copyString(globalId); savedLineNo = lin
             }
             ;
 type_spec   : INT {
-                $$ = newExpNode(TypeK);
+                $$ = newStmtNode(TypeK);
                 $$->attr.name = copyString(tokenString);
             }
             | VOID {
-                $$ = newExpNode(TypeK);
+                $$ = newStmtNode(TypeK);
                 $$->attr.name = copyString(tokenString);
             }
             ;
@@ -202,13 +202,13 @@ exp         : var EQ exp {
             | simple_exp {  $$ = $1; }
             ;
 var         : ID {
-                  $$ = newExpNode(VarK);
+                  $$ = newStmtNode(VarK);
                   $$->attr.name = copyString(globalId); }
             | ID {
               savedName = copyString(globalId);
               savedLineNo = lineno;
             } LBRACKETS exp RBRACKETS {
-              $$ = newExpNode(VarK);
+              $$ = newStmtNode(VarK);
               $$->child[0] = $4;
               $$->attr.name = savedName;
               $$->lineno = savedLineNo;
