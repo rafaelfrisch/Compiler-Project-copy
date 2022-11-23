@@ -57,7 +57,25 @@ static void insertNode( TreeNode * t)
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0,1);
+            st_insert(t->attr.name,t->lineno,0,-1);
+          break;
+        case FuncDeclK:
+          if (st_lookup(t->attr.name) == -1)
+          /* not yet in table, so treat as new definition */
+            st_insert(t->attr.name,t->lineno,location++,2);
+          else
+          /* already in table, so ignore location, 
+             add line number of use only */ 
+            st_insert(t->attr.name,t->lineno,0,-1);
+          break;
+        case ArrDeclK:
+          if (st_lookup(t->attr.name) == -1)
+          /* not yet in table, so treat as new definition */
+            st_insert(t->attr.name,t->lineno,location++,3);
+          else
+          /* already in table, so ignore location, 
+             add line number of use only */ 
+            st_insert(t->attr.name,t->lineno,0,-1);
           break;
         default:
           break;
@@ -68,11 +86,11 @@ static void insertNode( TreeNode * t)
       { case IdK:
           if (st_lookup(t->attr.name) == -1)
           /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++,1);
+            st_insert(t->attr.name,t->lineno,location++,-1);
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0,1);
+            st_insert(t->attr.name,t->lineno,0,-1);
           break;
         default:
           break;

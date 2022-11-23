@@ -105,6 +105,12 @@ char *convertDeclToMessage (int decl) {
   if (decl == 1) {
     return "VAR";
   }
+  if (decl == 2) {
+    return "FUNC";
+  }
+  if (decl == 3) {
+    return "ARR";
+  }
   return " ";
 }
 
