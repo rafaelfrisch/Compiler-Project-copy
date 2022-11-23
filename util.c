@@ -163,9 +163,6 @@ void printTree( TreeNode * tree )
         case RetK:
           fprintf(listing,"Return\n");
           break;
-        case VarK:
-          fprintf(listing,"Var: %s\n", tree->attr.name);
-          break;
         case TypeK:
           fprintf(listing,"Type: %s\n", tree->attr.name);
           break;

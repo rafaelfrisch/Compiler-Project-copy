@@ -202,13 +202,13 @@ exp         : var EQ exp {
             | simple_exp {  $$ = $1; }
             ;
 var         : ID {
-                  $$ = newStmtNode(VarK);
+                  $$ = newExpNode(IdK);
                   $$->attr.name = copyString(globalId); }
             | ID {
               savedName = copyString(globalId);
               savedLineNo = lineno;
             } LBRACKETS exp RBRACKETS {
-              $$ = newStmtNode(VarK);
+              $$ = newExpNode(IdK);
               $$->child[0] = $4;
               $$->attr.name = savedName;
               $$->lineno = savedLineNo;
