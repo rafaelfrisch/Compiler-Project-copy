@@ -78,7 +78,7 @@ static void genStmt( TreeNode * tree)
          if (TraceCode)  emitComment("<- assign") ;
          break; /* assign_k */
 
-      case ReadK:x
+      case ReadK:
          emitRO("IN",ac,0,0,"read integer value");
          loc = st_lookup(tree->attr.name);
          emitRM("ST",ac,loc,gp,"read: store value");
