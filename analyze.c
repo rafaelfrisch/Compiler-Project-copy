@@ -74,6 +74,11 @@ static void insertDecl( TreeNode * t)
   }
 }
 
+static void semanticError(TreeNode * t, char * message)
+{ fprintf(listing,"Erro semantico na linha %d: %s\n",t->lineno,message);
+  Error = TRUE;
+}
+
 static void insertType( TreeNode * t)
 { switch (t->nodekind)
   { case StmtK:
@@ -114,6 +119,7 @@ static void insertNode( TreeNode * t)
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
+            semanticError(t, "variavel ja declarada anteriormente");
             st_insert(t->attr.name,t->lineno,0,t->decl,t->type);
           break;
         case FuncDeclK:
@@ -123,6 +129,8 @@ static void insertNode( TreeNode * t)
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
+            
+            semanticError(t, "funcao ja declarada anteriormente");
             st_insert(t->attr.name,t->lineno,0,t->decl, t->type);
           break;
         case ArrDeclK:
@@ -132,6 +140,7 @@ static void insertNode( TreeNode * t)
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
+            semanticError(t, "variavel ja declarada anteriormente");
             st_insert(t->attr.name,t->lineno,0,t->decl,t->type);
           break;
         default:
