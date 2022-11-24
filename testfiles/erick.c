@@ -1,6 +1,4 @@
-int a;
-int b;
-
 void main(void){
-   b = 2 + 3;
+   int a;
+   a = 2 + 3;
 }
