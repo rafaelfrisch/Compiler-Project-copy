@@ -45,6 +45,60 @@ static void nullProc(TreeNode * t)
  * identifiers stored in t into 
  * the symbol table 
  */
+static void insertDecl( TreeNode * t)
+{ switch (t->nodekind)
+  { case StmtK:
+      switch (t->kind.stmt){
+        case VarDeclK:
+          t->decl = 1;
+          break;
+        case FuncDeclK:
+          t->decl = 2;
+          break;
+        case ArrDeclK:
+          t->decl = 3;
+          break;
+        default:
+          break;
+      }
+      break;
+    case ExpK:
+      switch (t->kind.exp)
+      { 
+        default:
+          break;
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+static void insertType( TreeNode * t)
+{ switch (t->nodekind)
+  { case StmtK:
+      switch (t->kind.stmt){
+        case TypeK:
+          if (strcmp(t->attr.name, "void") == 0) {
+            t->child[0]->type = Void;
+          } else if (strcmp(t->attr.name, "int") == 0) {
+            t->child[0]->type = Integer;
+          }
+          break;
+      }
+      break;
+    case ExpK:
+      switch (t->kind.exp)
+      { 
+        default:
+          break;
+      }
+      break;
+    default:
+      break;
+  }
+}
+
 static void insertNode( TreeNode * t)
 { switch (t->nodekind)
   { case StmtK:
@@ -52,36 +106,33 @@ static void insertNode( TreeNode * t)
       { case AssignK:
           break;
         case VarDeclK:
-          t->decl = 1;
           if (st_lookup(t->attr.name) == -1) {
           /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++,1,t->type);
+            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type);
           }
 
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0,-1,t->type);
+            st_insert(t->attr.name,t->lineno,0,t->decl,t->type);
           break;
         case FuncDeclK:
-          t->decl = 2;
           if (st_lookup(t->attr.name) == -1)
           /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++,2,t->type);
+            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type);
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0,-1, t->type);
+            st_insert(t->attr.name,t->lineno,0,t->decl, t->type);
           break;
         case ArrDeclK:
-          t->decl = 3;
           if (st_lookup(t->attr.name) == -1)
           /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++,3,t->type);
+            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type);
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0,-1,t->type);
+            st_insert(t->attr.name,t->lineno,0,t->decl,t->type);
           break;
         default:
           break;
@@ -104,7 +155,10 @@ static void insertNode( TreeNode * t)
  * table by preorder traversal of the syntax tree
  */
 void buildSymtab(TreeNode * syntaxTree)
-{ traverse(syntaxTree,insertNode,nullProc);
+{ 
+  traverse(syntaxTree,insertDecl,nullProc);
+  traverse(syntaxTree,insertType,nullProc);
+  traverse(syntaxTree,insertNode,nullProc);
   if (TraceAnalyze)
   { fprintf(listing,"\nSymbol table:\n\n");
     printSymTab(listing);
