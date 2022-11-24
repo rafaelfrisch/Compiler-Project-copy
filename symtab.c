@@ -183,7 +183,6 @@ void printErrors(FILE * listing)
       }
     }
   }
-  printf("\nChecando erros semanticos\n");
   if (no_main == 0){
     printf("Erro semantico: funcao main() não declarada\n");
   }

@@ -169,9 +169,10 @@ void buildSymtab(TreeNode * syntaxTree)
   traverse(syntaxTree,insertType,nullProc);
   traverse(syntaxTree,insertNode,nullProc);
   if (TraceAnalyze)
-  { fprintf(listing,"\nSymbol table:\n\n");
-    printSymTab(listing);
+  { 
     printErrors(listing);
+    fprintf(listing,"\nSymbol table:\n\n");
+    printSymTab(listing);
   }
 }
 
