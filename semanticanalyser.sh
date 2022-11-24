@@ -7,4 +7,5 @@ mkdir -p results &&
 ./cminus testfiles/sort.c > results/sort.txt &&
 ./cminus testfiles/simple.c > results/simple.txt &&
 ./cminus testfiles/void.c > results/void.txt &&
+./cminus testfiles/nomain.c > results/nomain.txt &&
 ./clearfiles.sh

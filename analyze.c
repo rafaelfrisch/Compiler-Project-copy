@@ -105,6 +105,7 @@ void buildSymtab(TreeNode * syntaxTree)
   if (TraceAnalyze)
   { fprintf(listing,"\nSymbol table:\n\n");
     printSymTab(listing);
+    printErrors(listing);
   }
 }
 

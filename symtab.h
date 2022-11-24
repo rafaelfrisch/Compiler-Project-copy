@@ -27,4 +27,6 @@ int st_lookup ( char * name );
  */
 void printSymTab(FILE * listing);
 
+void printErrors(FILE * listing);
+
 #endif

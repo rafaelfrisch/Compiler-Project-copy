@@ -136,3 +136,28 @@ void printSymTab(FILE * listing)
     }
   }
 } /* printSymTab */
+
+void printErrors(FILE * listing)
+{ int i;
+  int no_main = 0;
+  for (i=0;i<SIZE;++i)
+  { if (hashTable[i] != NULL)
+    { BucketList l = hashTable[i];
+      while (l != NULL)
+      { LineList t = l->lines;
+        if (strcmp(l->name, "main") == 0 && l->decl == 2){
+          no_main = 1;
+        }
+        while (t != NULL)
+        {
+          t = t->next;
+        }
+        l = l->next;
+      }
+    }
+  }
+  printf("\nChecando erros semanticos\n");
+  if (no_main == 0){
+    printf("Erro semantico: funcao main() não declarada\n");
+  }
+}
