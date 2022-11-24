@@ -50,6 +50,7 @@ typedef struct BucketListRec
      LineList lines;
      int memloc ; /* memory location for variable */
      int decl;
+     int type;
      struct BucketListRec * next;
    } * BucketList;
 
@@ -61,7 +62,7 @@ static BucketList hashTable[SIZE];
  * loc = memory location is inserted only the
  * first time, otherwise ignored
  */
-void st_insert( char * name, int lineno, int loc, int decl )
+void st_insert( char * name, int lineno, int loc, int decl, int type )
 { int h = hash(name);
   BucketList l =  hashTable[h];
   while ((l != NULL) && (strcmp(name,l->name) != 0))
@@ -73,6 +74,7 @@ void st_insert( char * name, int lineno, int loc, int decl )
     l->lines->lineno = lineno;
     l->memloc = loc;
     l->decl = decl;
+    l->type = type;
     l->lines->next = NULL;
     l->next = hashTable[h];
     hashTable[h] = l; }
@@ -84,6 +86,16 @@ void st_insert( char * name, int lineno, int loc, int decl )
     t->next->next = NULL;
   }
 } /* st_insert */
+
+void update_type ( char * name, int type )
+{ int h = hash(name);
+  BucketList l =  hashTable[h];
+  while ((l != NULL) && (strcmp(name,l->name) != 0))
+    l = l->next;
+  if (l != NULL) {
+    l->type = type;
+  }
+}
 
 /* Function st_lookup returns the memory 
  * location of a variable or -1 if not found
@@ -114,10 +126,24 @@ char *convertDeclToMessage (int decl) {
   return " ";
 }
 
+char *convertTypeToMessage (int type) {
+  if (type == 0) {
+    return "void";
+  }
+  if (type == 1) {
+    return "int";
+  }
+  if (type == 2) {
+    return "bool";
+  }
+  return " ";
+}
+
+
 void printSymTab(FILE * listing)
 { int i;
-  fprintf(listing,"Variable Name Location Tipo ID Line Numbers\n");
-  fprintf(listing,"------------- -------- ------- ------------\n");
+  fprintf(listing,"Variable Name Location Tipo ID Tipo Dado Line Numbers\n");
+  fprintf(listing,"------------- -------- ------- --------- ------------\n");
   for (i=0;i<SIZE;++i)
   { if (hashTable[i] != NULL)
     { BucketList l = hashTable[i];
@@ -125,7 +151,8 @@ void printSymTab(FILE * listing)
       { LineList t = l->lines;
         fprintf(listing,"%-14s ",l->name);
         fprintf(listing,"%-8d  ",l->memloc);
-        fprintf(listing,"%-8s  ",convertDeclToMessage(l->decl));
+        fprintf(listing,"%-7s  ",convertDeclToMessage(l->decl));
+        fprintf(listing,"%-7s  ",convertTypeToMessage(l->type));
         while (t != NULL)
         { fprintf(listing,"%4d ",t->lineno);
           t = t->next;

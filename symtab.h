@@ -14,7 +14,9 @@
  * loc = memory location is inserted only the
  * first time, otherwise ignored
  */
-void st_insert( char * name, int lineno, int loc, int decl );
+void st_insert( char * name, int lineno, int loc, int decl, int type );
+
+void update_type( char * name, int type );
 
 /* Function st_lookup returns the memory 
  * location of a variable or -1 if not found

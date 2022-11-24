@@ -55,33 +55,33 @@ static void insertNode( TreeNode * t)
           t->decl = 1;
           if (st_lookup(t->attr.name) == -1) {
           /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++,1);
+            st_insert(t->attr.name,t->lineno,location++,1,t->type);
           }
 
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0,-1);
+            st_insert(t->attr.name,t->lineno,0,-1,t->type);
           break;
         case FuncDeclK:
           t->decl = 2;
           if (st_lookup(t->attr.name) == -1)
           /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++,2);
+            st_insert(t->attr.name,t->lineno,location++,2,t->type);
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0,-1);
+            st_insert(t->attr.name,t->lineno,0,-1, t->type);
           break;
         case ArrDeclK:
           t->decl = 3;
           if (st_lookup(t->attr.name) == -1)
           /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++,3);
+            st_insert(t->attr.name,t->lineno,location++,3,t->type);
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0,-1);
+            st_insert(t->attr.name,t->lineno,0,-1,t->type);
           break;
         default:
           break;
@@ -172,6 +172,7 @@ static void checkNode(TreeNode * t)
           if (strcmp(t->attr.name, "void") == 0 && t->child[0]->decl == 1) {
             typeError(t, "declaracao invalida de variavel");
           }
+
         default:
           break;
       }
