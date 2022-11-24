@@ -52,6 +52,7 @@ static void insertNode( TreeNode * t)
       { case AssignK:
           break;
         case VarDeclK:
+          t->decl = 1;
           if (st_lookup(t->attr.name) == -1) {
           /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++,1);
@@ -63,6 +64,7 @@ static void insertNode( TreeNode * t)
             st_insert(t->attr.name,t->lineno,0,-1);
           break;
         case FuncDeclK:
+          t->decl = 2;
           if (st_lookup(t->attr.name) == -1)
           /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++,2);
@@ -72,6 +74,7 @@ static void insertNode( TreeNode * t)
             st_insert(t->attr.name,t->lineno,0,-1);
           break;
         case ArrDeclK:
+          t->decl = 3;
           if (st_lookup(t->attr.name) == -1)
           /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++,3);
@@ -165,6 +168,10 @@ static void checkNode(TreeNode * t)
             typeError(t, "chamada de função não declarada");
           }
           break;
+        case TypeK:
+          if (strcmp(t->attr.name, "void") == 0 && t->child[0]->decl == 1) {
+            typeError(t, "declaracao invalida de variavel");
+          }
         default:
           break;
       }
