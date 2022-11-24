@@ -8,4 +8,5 @@ mkdir -p results &&
 ./cminus testfiles/simple.c > results/simple.txt &&
 ./cminus testfiles/void.c > results/void.txt &&
 ./cminus testfiles/nomain.c > results/nomain.txt &&
+./cminus testfiles/erick.c > results/erick.txt &&
 ./clearfiles.sh
