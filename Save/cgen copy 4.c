@@ -105,28 +105,15 @@ void printTreeGen( TreeNode * tree )
           fprintf(listing,"Repeat\n");
           break;
         case AssignK:
-         if(tree->child[1]->kind.exp==OpK){
-               //fprintf(listing,"###t%d = ", regnum);
-               printTreeGen(tree->child[1]);
-               regnum += 1;
-               fprintf(listing,"##%s = t%d", tree->attr.name, regnum);
-            }
-            else
-               fprintf(listing,"%s = %d", tree->attr.name, tree->child[1]->attr.val);
 
-
-         /*  fprintf(listing,"treeA");
-          printTreeGen(tree->child[0]);
-          fprintf(listing,"treeB, %d",tree->child[1]->attr.val);
-          printTreeGen(tree->child[1]); */
           
-          /* p1 = tree->child[0];
+          p1 = tree->child[0];
           p2 = tree->child[1];
 
-          if(tree->child[0]->nodekind==ExpK && tree->child[0]->kind.exp==OpK){
+          if(p2->nodekind==ExpK && p2->kind.exp==OpK){
             printTreeGen(p2);
          }
-          fprintf(listing,"%s = %d\n",tree->child[0]->attr.name, p1->attr.val); */
+          else fprintf(listing,"%s = %d\n",tree->child[0]->attr.name, p1->attr.val);
         
 /*           p1 = tree->child[1];
           p2 = p1->child[0];
@@ -174,7 +161,7 @@ void printTreeGen( TreeNode * tree )
             //fprintf(listing,"###t%d = ", regnum);
             printTreeGen(tree->child[0]);
             regnum += 1;
-            fprintf(listing,"###t%d = t%d + %d", regnum-1, regnum, tree->child[1]->attr.val);
+            fprintf(listing,"###t%d = t%d + %d", regnum, regnum-1, tree->child[1]->attr.val);
           }
           /*else if(tree->child[1]->kind.exp==OpK){
             fprintf(listing,"t%d = ", regnum);

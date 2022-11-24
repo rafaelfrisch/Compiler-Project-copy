@@ -40,8 +40,8 @@ static int indentno = 0;
 /* printSpaces indents by printing spaces */
 static void printSpaces(void)
 { int i;
-  for (i=0;i<indentno;i++)
-    fprintf(listing," ");
+  for (i=0;i<indentno;i++){}
+    //fprintf(listing," ");
 }
 
 
@@ -105,28 +105,15 @@ void printTreeGen( TreeNode * tree )
           fprintf(listing,"Repeat\n");
           break;
         case AssignK:
-         if(tree->child[1]->kind.exp==OpK){
-               //fprintf(listing,"###t%d = ", regnum);
-               printTreeGen(tree->child[1]);
-               regnum += 1;
-               fprintf(listing,"##%s = t%d", tree->attr.name, regnum);
-            }
-            else
-               fprintf(listing,"%s = %d", tree->attr.name, tree->child[1]->attr.val);
 
-
-         /*  fprintf(listing,"treeA");
-          printTreeGen(tree->child[0]);
-          fprintf(listing,"treeB, %d",tree->child[1]->attr.val);
-          printTreeGen(tree->child[1]); */
           
-          /* p1 = tree->child[0];
+          p1 = tree->child[0];
           p2 = tree->child[1];
 
-          if(tree->child[0]->nodekind==ExpK && tree->child[0]->kind.exp==OpK){
+          if(p2->nodekind==ExpK && p2->kind.exp==OpK){
             printTreeGen(p2);
          }
-          fprintf(listing,"%s = %d\n",tree->child[0]->attr.name, p1->attr.val); */
+          else fprintf(listing,"%s = %d\n",tree->child[0]->attr.name, p1->attr.val);
         
 /*           p1 = tree->child[1];
           p2 = p1->child[0];
@@ -162,29 +149,34 @@ void printTreeGen( TreeNode * tree )
     else if (tree->nodekind==ExpK)
     { switch (tree->kind.exp) {
         case OpK:
-          /*if(tree->child[0]->kind.exp==OpK && tree->child[1]->kind.exp==OpK){
-            fprintf(listing,"t%d = ", regnum);
+          p1 = tree->child[0];
+          p2 = tree->child[1];
+          if(tree->child[0]->kind.exp==OpK && tree->child[1]->kind.exp==OpK){
+            int regnumint = regnum;
+            //fprintf(listing,"t%d = ", regnum);
             printTreeGen(tree->child[0]);
-            fprintf(listing,"t%d = ", regnum+1);
+            //fprintf(listing,"t%d = ", regnum+1);
             printTreeGen(tree->child[1]);
             regnum += 2;
-            fprintf(listing,"t%d + t%d", regnum-2, regnum-1);
+            fprintf(listing,"t%d + t%d\n", regnumint-2, regnumint-1);
           }
-          else*/ if(tree->child[0]->kind.exp==OpK){
-            //fprintf(listing,"###t%d = ", regnum);
-            printTreeGen(tree->child[0]);
-            regnum += 1;
-            fprintf(listing,"###t%d = t%d + %d", regnum-1, regnum, tree->child[1]->attr.val);
-          }
-          /*else if(tree->child[1]->kind.exp==OpK){
-            fprintf(listing,"t%d = ", regnum);
+          else if(tree->child[1]->kind.exp==OpK){
+            int regnumint = regnum;
+            //fprintf(listing,"t%d = ", regnum);
             int v = tree->child[0]->attr.val;
             printTreeGen(tree->child[1]);
             regnum += 1;
-            fprintf(listing,"%d + t%d", v, regnum-1);
-          }*/
+            fprintf(listing,"%d + t%d\n", tree->child[0]->attr.val, regnumint-1);
+          }
+          else if(tree->child[0]->kind.exp==OpK){
+            int regnumint = regnum;
+            //fprintf(listing,"t%d = ", regnum);
+            printTreeGen(tree->child[0]);
+            regnum += 1;
+            fprintf(listing,"t%d = t%d + %d\n", regnumint, regnumint-1, tree->child[1]->attr.val);
+          }
           else
-            fprintf(listing,"t%d =%d + %d", regnum, tree->child[0]->attr.val, tree->child[1]->attr.val);
+            fprintf(listing,"%d + %d\n",tree->child[0]->attr.val, tree->child[1]->attr.val);
 
 
           //fprintf(listing,"Op: ");
