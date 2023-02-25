@@ -14,7 +14,7 @@
  * loc = memory location is inserted only the
  * first time, otherwise ignored
  */
-void st_insert( char * name, int lineno, int loc, int decl, int type );
+void st_insert( char * name, int lineno, int loc, int decl, int type, char *scope );
 
 void update_type( char * name, int type );
 

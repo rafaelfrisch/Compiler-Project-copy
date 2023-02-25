@@ -51,6 +51,7 @@ typedef struct BucketListRec
      int memloc ; /* memory location for variable */
      int decl;
      int type;
+     char *scope;
      struct BucketListRec * next;
    } * BucketList;
 
@@ -62,7 +63,7 @@ static BucketList hashTable[SIZE];
  * loc = memory location is inserted only the
  * first time, otherwise ignored
  */
-void st_insert( char * name, int lineno, int loc, int decl, int type )
+void st_insert( char * name, int lineno, int loc, int decl, int type, char *scope)
 { int h = hash(name);
   BucketList l =  hashTable[h];
   while ((l != NULL) && (strcmp(name,l->name) != 0))
@@ -75,6 +76,7 @@ void st_insert( char * name, int lineno, int loc, int decl, int type )
     l->memloc = loc;
     l->decl = decl;
     l->type = type;
+    l->scope = scope;
     l->lines->next = NULL;
     l->next = hashTable[h];
     hashTable[h] = l; }
@@ -142,8 +144,8 @@ char *convertTypeToMessage (int type) {
 
 void printSymTab(FILE * listing)
 { int i;
-  fprintf(listing,"Variable Name Location Tipo ID Tipo Dado Line Numbers\n");
-  fprintf(listing,"------------- -------- ------- --------- ------------\n");
+  fprintf(listing,"Variable Name Location   Escopo   Tipo ID Tipo Dado Line Numbers\n");
+  fprintf(listing,"------------- -------- ---------- ------- --------- ------------\n");
   for (i=0;i<SIZE;++i)
   { if (hashTable[i] != NULL)
     { BucketList l = hashTable[i];
@@ -151,6 +153,7 @@ void printSymTab(FILE * listing)
       { LineList t = l->lines;
         fprintf(listing,"%-14s ",l->name);
         fprintf(listing,"%-8d  ",l->memloc);
+        fprintf(listing,"%-7s  ",l->scope);
         fprintf(listing,"%-7s  ",convertDeclToMessage(l->decl));
         fprintf(listing,"%-7s  ",convertTypeToMessage(l->type));
         while (t != NULL)

@@ -9,9 +9,11 @@
 #include "globals.h"
 #include "symtab.h"
 #include "analyze.h"
+#include <time.h>
 
 /* counter for variable memory locations */
 static int location = 0;
+char *currentScope = "global";
 
 /* Procedure traverse is a generic recursive 
  * syntax tree traversal routine:
@@ -112,36 +114,41 @@ static void insertNode( TreeNode * t)
           break;
         case VarDeclK:
           if (st_lookup(t->attr.name) == -1) {
-          /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type);
+            /* not yet in table, so treat as new definition */
+            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, currentScope);
           }
-
-          else
-          /* already in table, so ignore location, 
+          else {
+            /* already in table, so ignore location, 
              add line number of use only */ 
             semanticError(t, "variavel ja declarada anteriormente");
-            st_insert(t->attr.name,t->lineno,0,t->decl,t->type);
+            st_insert(t->attr.name,t->lineno,0,t->decl,t->type, currentScope);
+          }
           break;
         case FuncDeclK:
-          if (st_lookup(t->attr.name) == -1)
-          /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type);
-          else
-          /* already in table, so ignore location, 
+          if (st_lookup(t->attr.name) == -1){
+            /* not yet in table, so treat as new definition */
+            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, "global");
+            currentScope = t->attr.name;
+          }
+          else {
+            /* already in table, so ignore location, 
              add line number of use only */ 
-            
             semanticError(t, "funcao ja declarada anteriormente");
-            st_insert(t->attr.name,t->lineno,0,t->decl, t->type);
+            st_insert(t->attr.name,t->lineno,0,t->decl, t->type, "global");
+          }
+
           break;
         case ArrDeclK:
-          if (st_lookup(t->attr.name) == -1)
-          /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type);
-          else
-          /* already in table, so ignore location, 
+          if (st_lookup(t->attr.name) == -1){
+            /* not yet in table, so treat as new definition */
+            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, currentScope);
+          }
+          else{
+            /* already in table, so ignore location, 
              add line number of use only */ 
             semanticError(t, "variavel ja declarada anteriormente");
-            st_insert(t->attr.name,t->lineno,0,t->decl,t->type);
+            st_insert(t->attr.name,t->lineno,0,t->decl,t->type, currentScope);
+          }
           break;
         default:
           break;
@@ -167,6 +174,7 @@ void buildSymtab(TreeNode * syntaxTree)
 { 
   traverse(syntaxTree,insertDecl,nullProc);
   traverse(syntaxTree,insertType,nullProc);
+  //traverse(syntaxTree,insertScope,nullProc);
   traverse(syntaxTree,insertNode,nullProc);
   if (TraceAnalyze)
   { 
