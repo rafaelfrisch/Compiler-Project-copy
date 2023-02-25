@@ -6,6 +6,7 @@
 /****************************************************/
 
 #include "globals.h"
+#include <time.h>
 
 /* set NO_PARSE to TRUE to get a scanner-only compiler */
 #define NO_PARSE FALSE
@@ -73,7 +74,14 @@ int main( int argc, char * argv[] )
     exit(1);
   }
   listing = stdout; /* send listing to screen */
-  fprintf(listing,"\nCMINUS COMPILATION: %s\n",pgm);
+
+  // print time of compilation
+  time_t rawtime;
+  struct tm * timeinfo;
+  time ( &rawtime );
+  timeinfo = localtime ( &rawtime );
+
+  fprintf(listing,"\nCMINUS COMPILATION: %s\nTIME OF COMPILATION: %s",pgm, asctime (timeinfo));
 #if NO_PARSE
   while (getToken()!=ENDFILE);
 #else

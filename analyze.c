@@ -9,7 +9,6 @@
 #include "globals.h"
 #include "symtab.h"
 #include "analyze.h"
-#include <time.h>
 
 /* counter for variable memory locations */
 static int location = 0;
