@@ -21,13 +21,19 @@
 #define SHIFT 4
 
 /* the hash function */
-static int hash ( char * key )
+static int hash ( char * firstKey, char * secondKey)
 { int temp = 0;
   int i = 0;
-  while (key[i] != '\0')
-  { temp = ((temp << SHIFT) + key[i]) % SIZE;
+  while (firstKey[i] != '\0')
+  { temp = ((temp << SHIFT) + firstKey[i]) % SIZE;
     ++i;
   }
+  i = 0;
+  while (secondKey[i] != '\0')
+  { temp = ((temp << SHIFT) + secondKey[i]) % SIZE;
+    ++i;
+  }
+
   return temp;
 }
 
@@ -64,7 +70,7 @@ static BucketList hashTable[SIZE];
  * first time, otherwise ignored
  */
 void st_insert( char * name, int lineno, int loc, int decl, int type, char *scope)
-{ int h = hash(name);
+{ int h = hash(name, scope);
   BucketList l =  hashTable[h];
   while ((l != NULL) && (strcmp(name,l->name) != 0))
     l = l->next;
@@ -89,21 +95,11 @@ void st_insert( char * name, int lineno, int loc, int decl, int type, char *scop
   }
 } /* st_insert */
 
-void update_type ( char * name, int type )
-{ int h = hash(name);
-  BucketList l =  hashTable[h];
-  while ((l != NULL) && (strcmp(name,l->name) != 0))
-    l = l->next;
-  if (l != NULL) {
-    l->type = type;
-  }
-}
-
 /* Function st_lookup returns the memory 
  * location of a variable or -1 if not found
  */
-int st_lookup ( char * name )
-{ int h = hash(name);
+int st_lookup ( char * name, char * scope )
+{ int h = hash(name, scope);
   BucketList l =  hashTable[h];
   while ((l != NULL) && (strcmp(name,l->name) != 0))
     l = l->next;

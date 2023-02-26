@@ -112,7 +112,7 @@ static void insertNode( TreeNode * t)
       { case AssignK:
           break;
         case VarDeclK:
-          if (st_lookup(t->attr.name) == -1) {
+          if (st_lookup(t->attr.name, currentScope) == -1) {
             /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, currentScope);
           }
@@ -124,7 +124,7 @@ static void insertNode( TreeNode * t)
           }
           break;
         case FuncDeclK:
-          if (st_lookup(t->attr.name) == -1){
+          if (st_lookup(t->attr.name, currentScope) == -1){
             /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, "global");
             currentScope = t->attr.name;
@@ -138,7 +138,7 @@ static void insertNode( TreeNode * t)
 
           break;
         case ArrDeclK:
-          if (st_lookup(t->attr.name) == -1){
+          if (st_lookup(t->attr.name, currentScope) == -1){
             /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, currentScope);
           }
@@ -232,7 +232,7 @@ static void checkNode(TreeNode * t)
             typeError(t->child[1],"repeat test is not Boolean");
           break;
         case ActivK:
-          if (st_lookup(t->attr.name) == -1) {
+          if (st_lookup(t->attr.name, currentScope) == -1) {
             if (strcmp(t->attr.name, "input") == 0 || strcmp(t->attr.name, "output") == 0) {
               break;
             }
