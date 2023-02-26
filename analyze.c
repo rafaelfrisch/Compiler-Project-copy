@@ -110,6 +110,17 @@ static void insertNode( TreeNode * t)
   { case StmtK:
       switch (t->kind.stmt)
       { case AssignK:
+            int varIsNotGlobal = st_lookup(t->attr.name, "global");
+            int varIsNotOnCurrentScope = st_lookup(t->attr.name, currentScope);
+            if (varIsNotOnCurrentScope == -1 && varIsNotGlobal == -1) {
+              semanticError(t, "variável não declarada");;
+            }
+            if (varIsNotGlobal != -1) {
+              st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, "global");
+            }
+            else {
+              st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, currentScope);
+            }
           break;
         case VarDeclK:
           if (st_lookup(t->attr.name, currentScope) == -1) {
