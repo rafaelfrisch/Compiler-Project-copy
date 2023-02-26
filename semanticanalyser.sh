@@ -3,10 +3,10 @@ flex cminus.l &&
 gcc -c *.c &&
 gcc -o cminus *.o -ll &&
 mkdir -p results &&
-./cminus testfiles/mdc.c > results/mdc.txt &&
-./cminus testfiles/sort.c > results/sort.txt &&
-./cminus testfiles/simple.c > results/simple.txt &&
-./cminus testfiles/void.c > results/void.txt &&
-./cminus testfiles/nomain.c > results/nomain.txt &&
-./cminus testfiles/varvoid.c > results/varvoid.txt &&
+for file in testfiles/*
+do
+  name=${file##*/}
+  base=${name%.c}
+  ./cminus "$file" > results/"$base".txt
+done &&
 ./clearfiles.sh
