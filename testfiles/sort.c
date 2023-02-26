@@ -1,6 +1,7 @@
 /* ordenação por seleção */
 int x[10];
 
+/* low nao eh declarada na tabela de simbolos, corrigir esse bug de sintaxe */
 int minloc ( int a[], int low, int high ){
    int i;   int x;   int k;
    k = low;

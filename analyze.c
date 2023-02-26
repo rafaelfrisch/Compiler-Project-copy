@@ -160,13 +160,52 @@ static void insertNode( TreeNode * t)
             st_insert(t->attr.name,t->lineno,0,t->decl,t->type, currentScope);
           }
           break;
+        case IfK:
+            // if
+            // st_insert("IfK",t->lineno,location++,t->decl,t->type, currentScope);
+          break;
+        case RepeatK:
+            // final do while
+            // st_insert("RepeatK",t->lineno,location++,t->decl,t->type, currentScope);
+          break;
+        case WriteK:
+            // nao sei o que eh
+            // st_insert("WriteK",t->lineno,location++,t->decl,t->type, currentScope);
+          break;
+        case ActivK:
+            // chamada de função
+            // st_insert("ActivK",t->lineno,location++,t->decl,t->type, currentScope);
+          break;
+        case DeclK:
+            // so eh declarado mas não usa em lugar nenhum
+            // st_insert("DeclK",t->lineno,location++,t->decl,t->type, currentScope);
+          break;
+        case RetK:
+            // retorno de funcao
+            // st_insert("RetK",t->lineno,location++,t->decl,t->type, currentScope);
+          break;
+        case TypeK:
+            // atribuicao de tipo, desnecessario, ja é colocado o tipo na declaração da variável
+            // st_insert("TypeK",t->lineno,location++,t->decl,t->type, currentScope);
+          break;
         default:
           break;
       }
       break;
     case ExpK:
       switch (t->kind.exp)
-      { case IdK:
+      { case OpK:
+          // operacao qualquer de variavel
+          // st_insert("OpK",t->lineno,location++,t->decl,t->type, currentScope);
+          break;
+        case ConstK:
+          // comparacao ou atribuicao de variavel Ex: i=0, i == 0
+          // st_insert("ConstK",t->lineno,location++,t->decl,t->type, currentScope);
+          break;
+        case IdK:
+          // variavel usada sem ser a declaracao
+          // fprintf(listing, "\n nome: %s linha: %d decl: %s type: %s scope:%s",t->attr.name, t->lineno,convertDeclToMessage(t->decl),convertTypeToMessage(t->type), currentScope);
+          // st_insert("IdK",t->lineno,location++,t->decl,t->type, currentScope);
           break;
         default:
           break;
@@ -184,8 +223,8 @@ void buildSymtab(TreeNode * syntaxTree)
 { 
   traverse(syntaxTree,insertDecl,nullProc);
   traverse(syntaxTree,insertType,nullProc);
-  //traverse(syntaxTree,insertScope,nullProc);
   traverse(syntaxTree,insertNode,nullProc);
+  //traverse(syntaxTree,insertScope,nullProc);
   if (TraceAnalyze)
   { 
     printErrors(listing);
