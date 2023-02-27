@@ -21,6 +21,8 @@ void st_insert( char * name, int lineno, int loc, int decl, int type, char *scop
  */
 int st_lookup ( char * name, char * scope );
 
+int st_lookup_decl ( char * name, char * scope );
+
 char *convertTypeToMessage (int type);
 
 char *convertDeclToMessage (int decl);

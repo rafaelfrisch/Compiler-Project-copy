@@ -106,32 +106,45 @@ static void insertType( TreeNode * t)
 }
 
 static void insertNode( TreeNode * t)
-{ switch (t->nodekind)
+{
+ switch (t->nodekind)
   { case StmtK:
       switch (t->kind.stmt)
-      { case AssignK:
-            int varIsNotGlobal = st_lookup(t->attr.name, "global");
-            int varIsNotOnCurrentScope = st_lookup(t->attr.name, currentScope);
-            if (varIsNotOnCurrentScope == -1 && varIsNotGlobal == -1) {
-              semanticError(t, "variável não declarada");;
-            }
-            if (varIsNotGlobal != -1) {
-              st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, "global");
-            }
-            else {
-              st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, currentScope);
-            }
+      { 
+        int varIsNotGlobal, varIsNotOnCurrentScope;
+        case AssignK:
+          varIsNotGlobal = st_lookup(t->attr.name, "global");
+          varIsNotOnCurrentScope = st_lookup(t->attr.name, currentScope);
+          if (varIsNotOnCurrentScope == -1 && varIsNotGlobal == -1) {
+            semanticError(t, "variável não declarada");;
+          }
+          if (varIsNotGlobal != -1) {
+            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, "global");
+          }
+          else {
+            st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, currentScope);
+          }
           break;
         case VarDeclK:
-          if (st_lookup(t->attr.name, currentScope) == -1) {
+          varIsNotGlobal = st_lookup(t->attr.name, "global");
+          varIsNotOnCurrentScope = st_lookup(t->attr.name, currentScope);
+          if (varIsNotOnCurrentScope == -1 && varIsNotGlobal == -1) {
             /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, currentScope);
           }
           else {
+            int var_decl_current_scope = st_lookup_decl(t->attr.name, currentScope);
+            int var_decl_global_scope = st_lookup_decl(t->attr.name, "global");
             /* already in table, so ignore location, 
              add line number of use only */ 
-            semanticError(t, "variavel ja declarada anteriormente");
-            st_insert(t->attr.name,t->lineno,0,t->decl,t->type, currentScope);
+            if ((varIsNotGlobal != -1 && (var_decl_global_scope == t->decl)) || 
+              (varIsNotOnCurrentScope != -1 && (var_decl_current_scope == t->decl))) {
+              semanticError(t, "variavel ja declarada anteriormente");
+              st_insert(t->attr.name,t->lineno,0,t->decl,t->type, currentScope);
+            } else {
+              semanticError(t, "declaracao inválida");
+              st_insert(t->attr.name,t->lineno,0,t->decl,t->type, currentScope);
+            }
           }
           break;
         case FuncDeclK:
@@ -270,6 +283,10 @@ static void checkNode(TreeNode * t)
         //     typeError(t->child[0],"if test is not Boolean");
         //   break;
         case AssignK:
+          // fprintf(listing, "\n nome: %s linha: %d decl: %s type: %s scope:%s",
+          // t->attr.name, t->lineno,convertDeclToMessage(t->decl),convertTypeToMessage(t->type), currentScope);
+          // fprintf(listing, "\n filho nome: %s linha: %d decl: %s type: %s scope:%s",
+          // t->child[0]->attr.name, t->child[0]->lineno,convertDeclToMessage(t->child[0]->decl),convertTypeToMessage(t->child[0]->type), currentScope);
           if (t->child[0]->type != Integer)
             typeError(t->child[0],"assignment of non-integer value");
           break;
@@ -293,6 +310,7 @@ static void checkNode(TreeNode * t)
           if (strcmp(t->attr.name, "void") == 0 && t->child[0]->decl == 1) {
             typeError(t, "declaracao invalida de variavel");
           }
+          break;
 
         default:
           break;

@@ -1,7 +1,17 @@
 void a;
 
-int func (void){
+void func (void){
 
 }
 
-int func;
+void fun (void){
+
+}
+
+
+
+void main (void) {
+  int b;
+  int func;
+  b = fun();
+}

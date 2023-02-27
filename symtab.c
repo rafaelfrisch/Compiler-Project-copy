@@ -107,6 +107,15 @@ int st_lookup ( char * name, char * scope )
   else return l->memloc;
 }
 
+int st_lookup_decl ( char * name, char * scope)
+{ int h = hash(name, scope);
+  BucketList l =  hashTable[h];
+  while ((l != NULL) && (strcmp(name,l->name) != 0))
+    l = l->next;
+  if (l == NULL) return -1;
+  else return l->decl;
+}
+
 /* Procedure printSymTab prints a formatted 
  * listing of the symbol table contents 
  * to the listing file
