@@ -282,7 +282,7 @@ static void checkNode(TreeNode * t)
             typeError(t->child[1],"repeat test is not Boolean");
           break;
         case ActivK:
-          if (st_lookup(t->attr.name, currentScope) == -1) {
+          if (st_lookup(t->attr.name, currentScope) == -1 && st_lookup(t->attr.name, "global") == -1) {
             if (strcmp(t->attr.name, "input") == 0 || strcmp(t->attr.name, "output") == 0) {
               break;
             }
