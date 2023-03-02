@@ -195,8 +195,9 @@ void codeGen(TreeNode * syntaxTree, char * codefile)
 {  char * s = malloc(strlen(codefile)+7);
    strcpy(s,"File: ");
    strcat(s,codefile);
-   emitComment("TINY Compilation to TM Code");
+   emitComment("CMINUS COMPILATION");
    emitComment(s);
+   emitTimeOfCompilation();
    /* generate standard prelude */
    emitComment("Standard prelude:");
    emitRM("LD",mp,ac,"load maxaddress from location 0");

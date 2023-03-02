@@ -36,6 +36,7 @@
  */
 void emitComment(char *c);
 
+void emitTimeOfCompilation();
 /* Procedure emitRO emits a register-only
  * TM instruction
  * op = the opcode

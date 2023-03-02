@@ -7,6 +7,7 @@
 /****************************************************/
 
 #include "globals.h"
+#include <time.h>
 #include "code.h"
 
 /* TM location number for current instruction emission */
@@ -24,6 +25,18 @@ void emitComment(char *c)
 {
   if (TraceCode)
     fprintf(code, "* %s\n", c);
+}
+
+void emitTimeOfCompilation()
+{
+  if (TraceCode)
+  {
+    time_t rawtime;
+    struct tm *timeinfo;
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    fprintf(code, "* TIME OF COMPILATION: %s\n", asctime(timeinfo));
+  }
 }
 
 /* Procedure emitRO emits a register-only
