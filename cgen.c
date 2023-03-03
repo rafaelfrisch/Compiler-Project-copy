@@ -99,6 +99,8 @@ static void genStmt(TreeNode *tree)
   case TypeK:
     if (TraceCode)
       emitComment("-> type");
+    p1 = tree->child[0];
+    cGen(p1);
     break;
   case VarDeclK:
     if (TraceCode)
