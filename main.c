@@ -45,12 +45,18 @@ FILE * listing;
 FILE * code;
 
 /* allocate and set tracing flags */
-// Intermediate code
 int EchoSource = FALSE;
 int TraceScan = FALSE;
-int TraceParse = FALSE;
+int TraceParse = TRUE;
 int TraceAnalyze = FALSE;
 int TraceCode = TRUE;
+
+// // Intermediate code
+// int EchoSource = FALSE;
+// int TraceScan = FALSE;
+// int TraceParse = FALSE;
+// int TraceAnalyze = FALSE;
+// int TraceCode = TRUE;
 // // Semantic
 // int EchoSource = FALSE;
 // int TraceScan = FALSE;

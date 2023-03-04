@@ -33,29 +33,29 @@ static void genStmt(TreeNode *tree)
   case IfK:
     if (TraceCode)
       emitComment("-> if");
-    p1 = tree->child[0];
-    p2 = tree->child[1];
-    p3 = tree->child[2];
-    /* generate code for test expression */
-    cGen(p1);
-    savedLoc1 = emitSkip(1);
-    emitComment("if: jump to else belongs here");
-    /* recurse on then part */
-    cGen(p2);
-    savedLoc2 = emitSkip(1);
-    emitComment("if: jump to end belongs here");
-    currentLoc = emitSkip(0);
-    emitBackup(savedLoc1);
-    emitRM_Abs("JEQ", ac, currentLoc, "if: jmp to else");
-    emitRestore();
-    /* recurse on else part */
-    cGen(p3);
-    currentLoc = emitSkip(0);
-    emitBackup(savedLoc2);
-    emitRM_Abs("LDA", pc, currentLoc, "jmp to end");
-    emitRestore();
-    if (TraceCode)
-      emitComment("<- if");
+    // p1 = tree->child[0];
+    // p2 = tree->child[1];
+    // p3 = tree->child[2];
+    // /* generate code for test expression */
+    // cGen(p1);
+    // savedLoc1 = emitSkip(1);
+    // emitComment("if: jump to else belongs here");
+    // /* recurse on then part */
+    // cGen(p2);
+    // savedLoc2 = emitSkip(1);
+    // emitComment("if: jump to end belongs here");
+    // currentLoc = emitSkip(0);
+    // emitBackup(savedLoc1);
+    // emitRM_Abs("JEQ", ac, currentLoc, "if: jmp to else");
+    // emitRestore();
+    // /* recurse on else part */
+    // cGen(p3);
+    // currentLoc = emitSkip(0);
+    // emitBackup(savedLoc2);
+    // emitRM_Abs("LDA", pc, currentLoc, "jmp to end");
+    // emitRestore();
+    // if (TraceCode)
+    //   emitComment("<- if");
     break; /* if_k */
 
   case RepeatK:
@@ -77,12 +77,12 @@ static void genStmt(TreeNode *tree)
   case AssignK:
     if (TraceCode)
       emitComment("-> assign");
-    /* generate code for rhs */
-    cGen(tree->child[0]);
-    /* now store value */
-    emitRM("ST", ac, gp, "assign: store value");
-    if (TraceCode)
-      emitComment("<- assign");
+    // /* generate code for rhs */
+    // cGen(tree->child[0]);
+    // /* now store value */
+    // emitRM("ST", ac, gp, "assign: store value");
+    // if (TraceCode)
+    //   emitComment("<- assign");
     break; /* assign_k */
   case DeclK:
     if (TraceCode)
@@ -100,15 +100,25 @@ static void genStmt(TreeNode *tree)
     if (TraceCode)
       emitComment("-> type");
     p1 = tree->child[0];
-    cGen(p1);
+    if (p1->kind.stmt == FuncDeclK) {
+      cGen(p1);
+    }
+
     break;
   case VarDeclK:
-    if (TraceCode)
+    if (TraceCode){
       emitComment("-> vardecl");
+      emitComment(tree->attr.name);
+    }
+      
     break;
   case FuncDeclK:
-    if (TraceCode)
+    if (TraceCode){
       emitComment("-> funcDecl");
+      emitComment(tree->attr.name);
+    }
+    p1 = tree->child[0];
+    cGen(p1);
     break;
   case ArrDeclK:
     if (TraceCode)
@@ -143,6 +153,7 @@ static void genExp(TreeNode *tree)
   int loc;
   TreeNode *p1, *p2;
   switch (tree->kind.exp)
+   
   {
   case ConstK:
     if (TraceCode)
