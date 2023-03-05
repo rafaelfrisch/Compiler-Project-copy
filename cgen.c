@@ -21,6 +21,110 @@ static int tmpOffset = 0;
 /* prototype for internal recursive code generator */
 static void cGen(TreeNode *tree);
 
+// static void iterateFunction(TreeNode *tree)
+// {
+//   if (tree != NULL)
+//   {
+//     emitComment("iterateFunctionNotNull");
+//     switch (tree->kind.stmt)
+//     {
+//     // case TypeK:
+//     //   if (TraceCode)
+//     //     emitComment("-> typeK função");
+//     //   iterateFunction(tree->sibling);
+//     //   break;
+//     default:
+//       if (TraceCode)
+//         emitComment("-> break");
+//       break;
+//     }
+
+//   }
+// }
+
+static int cGenAssign(TreeNode *tree)
+{
+  TreeNode *p1, *p2, *p3;
+  int firstRegister, secondRegister;
+  if (tree != NULL)
+  {
+    switch (tree->nodekind)
+    {
+    case StmtK:
+      switch (tree->kind.stmt)
+      {
+      default:
+        if (TraceCode)
+          emitComment("-> break cgenStmtk");
+        break;
+      }
+      break;
+    case ExpK:
+      switch (tree->kind.exp)
+      {
+      case OpK:
+        emitComment("Opk");
+        emitComment(getOpChar(tree));
+        p1 = tree->child[0];
+        p2 = tree->child[1];
+        firstRegister = cGenAssign(p1);
+        secondRegister = cGenAssign(p2);
+        emitOpAssign(getOpChar(tree));
+        if (p1->kind.exp == IdK)
+        {
+          fprintf(code, "%s", p1->attr.name);
+        }
+        else if (p1->kind.exp == ConstK)
+        {
+          fprintf(code, "%d", p1->attr.val);
+        }
+        else
+        {
+          fprintf(code, "t%d", firstRegister - 1);
+        }
+
+        fprintf(code, " %s ", getOpChar(tree));
+
+        if (p2->kind.exp == IdK)
+        {
+          fprintf(code, "%s", p2->attr.name);
+        }
+        else if (p2->kind.exp == ConstK)
+        {
+          fprintf(code, "%d", p2->attr.val);
+        }
+        else
+        {
+          fprintf(code, "t%d", secondRegister - 1);
+        }
+        fprintf(code, "\n");
+        break;
+      case IdK:
+        emitCommentWithLine("Idk", tree->lineno);
+        emitCommentWithLine(tree->attr.name, tree->lineno);
+        p1 = tree->child[0];
+        p2 = tree->child[1];
+        firstRegister = cGenAssign(p1);
+        secondRegister = cGenAssign(p2);
+        break;
+      case ConstK:
+        emitCommentWithLine("ConstK", tree->lineno);
+        break;
+      default:
+        if (TraceCode)
+          emitComment("-> break cgenExpk");
+        break;
+      }
+      break;
+    default:
+      if (TraceCode)
+        emitComment("-> break cGen");
+      break;
+    }
+  }
+  return getRegisterNumber();
+}
+
 /* Procedure genStmt generates code at a statement node */
 static void genStmt(TreeNode *tree)
 {
@@ -76,13 +180,17 @@ static void genStmt(TreeNode *tree)
 
   case AssignK:
     if (TraceCode)
-      emitComment("-> assign");
+      emitCommentWithLine("-> assign", tree->lineno);
     // /* generate code for rhs */
-    // cGen(tree->child[0]);
+    int first, second;
+    p1 = tree->child[0];
+    p2 = tree->child[1];
+    first = cGenAssign(p1);
+    second = cGenAssign(p2);
     // /* now store value */
-    // emitRM("ST", ac, gp, "assign: store value");
-    // if (TraceCode)
-    //   emitComment("<- assign");
+    // emitAssign("assign value");
+    if (TraceCode)
+      emitCommentWithLine("<- assign", tree->lineno);
     break; /* assign_k */
   case DeclK:
     if (TraceCode)
@@ -100,24 +208,32 @@ static void genStmt(TreeNode *tree)
     if (TraceCode)
       emitComment("-> type");
     p1 = tree->child[0];
-    if (p1->kind.stmt == FuncDeclK) {
+    if (p1->kind.stmt == FuncDeclK)
+    {
       cGen(p1);
     }
 
     break;
   case VarDeclK:
-    if (TraceCode){
+    if (TraceCode)
+    {
       emitComment("-> vardecl");
       emitComment(tree->attr.name);
     }
-      
+
     break;
   case FuncDeclK:
-    if (TraceCode){
+    if (TraceCode)
+    {
       emitComment("-> funcDecl");
       emitComment(tree->attr.name);
     }
     p1 = tree->child[0];
+    // check case foi void main(void)
+    if (tree->child[0] == NULL)
+    {
+      p1 = tree->child[1];
+    }
     cGen(p1);
     break;
   case ArrDeclK:
@@ -153,7 +269,7 @@ static void genExp(TreeNode *tree)
   int loc;
   TreeNode *p1, *p2;
   switch (tree->kind.exp)
-   
+
   {
   case ConstK:
     if (TraceCode)

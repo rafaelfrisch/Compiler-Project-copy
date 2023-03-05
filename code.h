@@ -36,7 +36,11 @@
  */
 void emitComment(char *c);
 
+void emitCommentWithLine(char *c, int line);
+
 void emitTimeOfCompilation();
+
+char *getOpChar(TreeNode *tree);
 /* Procedure emitRO emits a register-only
  * TM instruction
  * op = the opcode
@@ -73,6 +77,10 @@ void emitBackup(int loc);
  * unemitted position
  */
 void emitRestore(void);
+
+void emitOpAssign(char *op);
+
+int getRegisterNumber(void);
 
 /* Procedure emitRM_Abs converts an absolute reference
  * to a pc-relative reference when emitting a

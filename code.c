@@ -18,6 +18,10 @@ static int emitLoc = 0;
    emitBackup, and emitRestore */
 static int highEmitLoc = 0;
 
+static int highRegisterNumber = 0;
+
+static int registerNumber = 0;
+
 /* Procedure emitComment prints a comment line
  * with comment c in the code file
  */
@@ -25,6 +29,12 @@ void emitComment(char *c)
 {
   if (TraceCode)
     fprintf(code, "* %s\n", c);
+}
+
+void emitCommentWithLine(char *c, int line)
+{
+  if (TraceCode)
+    fprintf(code, "* %s line: %d\n", c, line);
 }
 
 void emitTimeOfCompilation()
@@ -39,6 +49,33 @@ void emitTimeOfCompilation()
   }
 }
 
+char *getOpChar(TreeNode *tree)
+{
+  switch (tree->attr.op)
+  {
+  case PLUS:
+    return "+";
+    break;
+  case MINUS:
+    return "-";
+    break;
+  case TIMES:
+    return "*";
+    break;
+  case OVER:
+    return "/";
+    break;
+  case LT:
+    return "<";
+    break;
+  case EQ:
+    return "==";
+    break;
+  default:
+    return "BUG: Unknown operator";
+    break;
+  }
+}
 /* Procedure emitRO emits a register-only
  * TM instruction
  * op = the opcode
@@ -74,6 +111,32 @@ void emitRM(char *op, int r, int s, char *c)
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
 } /* emitRM */
+
+void emitOpAssign(char *op)
+{
+  if (TraceCode)
+    fprintf(code, "\t%s", op);
+  fprintf(code, "%3d:  t%d = ", emitLoc++, registerNumber);
+
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+  registerNumber++;
+}
+
+// void emitConstAssign(char *constant)
+// {
+//   if (TraceCode)
+//     fprintf(code, "\t%s", op);
+//   fprintf(code, "%3d:  t%d = ", emitLoc++, registerNumber);
+
+//   if (highEmitLoc < emitLoc)
+//     highEmitLoc = emitLoc;
+//   registerNumber++;
+// }
+
+int getRegisterNumber(){
+  return registerNumber;
+}
 
 /* Function emitSkip skips "howMany" code
  * locations for later backpatch. It also
