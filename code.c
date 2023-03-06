@@ -123,16 +123,12 @@ void emitOpAssign(char *op)
   registerNumber++;
 }
 
-// void emitConstAssign(char *constant)
-// {
-//   if (TraceCode)
-//     fprintf(code, "\t%s", op);
-//   fprintf(code, "%3d:  t%d = ", emitLoc++, registerNumber);
-
-//   if (highEmitLoc < emitLoc)
-//     highEmitLoc = emitLoc;
-//   registerNumber++;
-// }
+void emitAssign()
+{
+  fprintf(code, "%3d: ", emitLoc++);
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+}
 
 int getRegisterNumber(){
   return registerNumber;

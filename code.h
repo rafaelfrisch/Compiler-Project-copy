@@ -82,6 +82,8 @@ void emitOpAssign(char *op);
 
 int getRegisterNumber(void);
 
+void emitAssign(void);
+
 /* Procedure emitRM_Abs converts an absolute reference
  * to a pc-relative reference when emitting a
  * register-to-memory TM instruction

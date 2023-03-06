@@ -130,6 +130,7 @@ static void genStmt(TreeNode *tree)
 {
   TreeNode *p1, *p2, *p3;
   int savedLoc1, savedLoc2, currentLoc;
+  int firstRegister, secondRegister;
   int loc;
   switch (tree->kind.stmt)
   {
@@ -180,13 +181,32 @@ static void genStmt(TreeNode *tree)
 
   case AssignK:
     if (TraceCode)
-      emitCommentWithLine("-> assign", tree->lineno);
+      emitCommentWithLine("-> assign\n", tree->lineno);
     // /* generate code for rhs */
-    int first, second;
     p1 = tree->child[0];
     p2 = tree->child[1];
-    first = cGenAssign(p1);
-    second = cGenAssign(p2);
+    firstRegister = cGenAssign(p1);
+    secondRegister = cGenAssign(p2);
+    emitAssign();
+    fprintf(code, "%s = ", tree->attr.name);
+    if (firstRegister == secondRegister)
+    {
+      if (p2->kind.exp == IdK)
+      {
+        fprintf(code, "%s\n", p2->attr.name);
+      }
+      else if (p2->kind.exp == ConstK)
+      {
+        fprintf(code, "%d\n", p2->attr.val);
+      }
+    }
+    else
+    {
+      if (p2->kind.exp == OpK)
+      {
+        fprintf(code, "t%d\n", secondRegister - 1);
+      }
+    }
     // /* now store value */
     // emitAssign("assign value");
     if (TraceCode)
