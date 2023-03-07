@@ -114,8 +114,6 @@ void emitRM(char *op, int r, int s, char *c)
 
 void emitOpAssign(char *op)
 {
-  if (TraceCode)
-    fprintf(code, "\t%s", op);
   fprintf(code, "%3d:  t%d = ", emitLoc++, registerNumber);
 
   if (highEmitLoc < emitLoc)

@@ -63,8 +63,6 @@ static int cGenAssign(TreeNode *tree)
       switch (tree->kind.exp)
       {
       case OpK:
-        emitComment("Opk");
-        emitComment(getOpChar(tree));
         p1 = tree->child[0];
         p2 = tree->child[1];
         firstRegister = cGenAssign(p1);
@@ -100,15 +98,12 @@ static int cGenAssign(TreeNode *tree)
         fprintf(code, "\n");
         break;
       case IdK:
-        emitCommentWithLine("Idk", tree->lineno);
-        emitCommentWithLine(tree->attr.name, tree->lineno);
         p1 = tree->child[0];
         p2 = tree->child[1];
         firstRegister = cGenAssign(p1);
         secondRegister = cGenAssign(p2);
         break;
       case ConstK:
-        emitCommentWithLine("ConstK", tree->lineno);
         break;
       default:
         if (TraceCode)
