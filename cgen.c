@@ -130,6 +130,7 @@ static void genStmt(TreeNode *tree)
   int savedLoc1, savedLoc2, currentLoc;
   int firstRegister, secondRegister;
   int loc;
+  int numParams;
   switch (tree->kind.stmt)
   {
 
@@ -207,7 +208,7 @@ static void genStmt(TreeNode *tree)
   case DeclK:
     break;
   case ActivK:
-    int numParams;
+
     numParams = printNumParams(tree);
     fprintf(code, "call %s,%d\n", tree->attr.name, numParams);
     break;
@@ -260,13 +261,9 @@ static void genStmt(TreeNode *tree)
 
     break;
   case WriteK:
-
+    numParams = printNumParams(tree);
+    fprintf(code, "call %s,%d\n", tree->attr.name, numParams);
     break;
-    // case ReadK:
-    //    emitRO("IN",ac,0,0,"read integer value");
-    //    loc = st_lookup(tree->attr.name);
-    //    emitRM("ST",ac,loc,gp,"read: store value");
-    //    break;
     // case WriteK:
     //    /* generate code for expression to write */
     //    cGen(tree->child[0]);
