@@ -84,6 +84,12 @@ int getRegisterNumber(void);
 
 void emitAssign(void);
 
+void increaseSubroutineLevel();
+
+void decreaseSubroutineLevel();
+
+void printSubroutine();
+
 /* Procedure emitRM_Abs converts an absolute reference
  * to a pc-relative reference when emitting a
  * register-to-memory TM instruction

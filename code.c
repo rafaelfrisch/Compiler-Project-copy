@@ -22,19 +22,32 @@ static int highRegisterNumber = 0;
 
 static int registerNumber = 0;
 
+static int subRoutineLevel = 0;
+
 /* Procedure emitComment prints a comment line
  * with comment c in the code file
  */
+void printSubRoutine() {
+  for (int i = 0; i < subRoutineLevel; i++) {
+    fprintf(code, "\t");
+  }
+}
+
 void emitComment(char *c)
 {
-  if (TraceCode)
+  if (TraceCode) {
+    printSubRoutine();
     fprintf(code, "* %s\n", c);
+  }
+    
 }
 
 void emitCommentWithLine(char *c, int line)
 {
-  if (TraceCode)
+  if (TraceCode) {
+    printSubRoutine();
     fprintf(code, "* %s line: %d\n", c, line);
+  }
 }
 
 void emitTimeOfCompilation()
@@ -47,6 +60,14 @@ void emitTimeOfCompilation()
     timeinfo = localtime(&rawtime);
     fprintf(code, "* TIME OF COMPILATION: %s\n", asctime(timeinfo));
   }
+}
+
+void increaseSubroutineLevel() {
+  subRoutineLevel++;  
+}
+
+void decreaseSubroutineLevel() {
+  subRoutineLevel--;
 }
 
 char *getOpChar(TreeNode *tree)
@@ -86,6 +107,7 @@ char *getOpChar(TreeNode *tree)
  */
 void emitRO(char *op, int r, int s, int t, char *c)
 {
+  printSubRoutine();
   fprintf(code, "%3d:  %5s  %d,%d,%d ", emitLoc++, op, r, s, t);
   if (TraceCode)
     fprintf(code, "\t%s", c);
@@ -104,6 +126,7 @@ void emitRO(char *op, int r, int s, int t, char *c)
  */
 void emitRM(char *op, int r, int s, char *c)
 {
+  printSubRoutine();
   fprintf(code, "%3d:  %5s  %d(%d) ", emitLoc++, op, r, s);
   if (TraceCode)
     fprintf(code, "\t%s", c);
@@ -114,6 +137,7 @@ void emitRM(char *op, int r, int s, char *c)
 
 void emitOpAssign(char *op)
 {
+  printSubRoutine();
   fprintf(code, "%3d:  t%d = ", emitLoc++, registerNumber);
 
   if (highEmitLoc < emitLoc)
@@ -123,6 +147,7 @@ void emitOpAssign(char *op)
 
 void emitAssign()
 {
+  printSubRoutine();
   fprintf(code, "%3d: ", emitLoc++);
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;

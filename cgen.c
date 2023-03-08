@@ -176,7 +176,7 @@ static void genStmt(TreeNode *tree)
 
   case AssignK:
     if (TraceCode)
-      emitCommentWithLine("-> assign\n", tree->lineno);
+      emitCommentWithLine("-> assign", tree->lineno);
     // /* generate code for rhs */
     p1 = tree->child[0];
     p2 = tree->child[1];
@@ -243,6 +243,8 @@ static void genStmt(TreeNode *tree)
       emitComment("-> funcDecl");
       emitComment(tree->attr.name);
     }
+    fprintf(code, "%s:\n", tree->attr.name);
+    increaseSubroutineLevel();
     p1 = tree->child[0];
     // check case foi void main(void)
     if (tree->child[0] == NULL)
@@ -250,6 +252,7 @@ static void genStmt(TreeNode *tree)
       p1 = tree->child[1];
     }
     cGen(p1);
+    decreaseSubroutineLevel();
     break;
   case ArrDeclK:
     if (TraceCode)
