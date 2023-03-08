@@ -204,6 +204,26 @@ static void genStmt(TreeNode *tree)
   case ActivK:
     break;
   case RetK:
+    p1 = tree->child[0];
+    p2 = tree->child[1];
+    firstRegister = cGenAssign(p1);
+    secondRegister = cGenAssign(p2);
+    emitAssign();
+    fprintf(code, "return ");
+
+    if (p1->kind.exp == IdK)
+    {
+      fprintf(code, "%s\n", p1->attr.name);
+    }
+    else if (p1->kind.exp == ConstK)
+    {
+      fprintf(code, "%d\n", p1->attr.val);
+    }
+    else if (p1->kind.exp == OpK)
+    {
+      fprintf(code, "t%d\n", secondRegister);
+    }
+
     break;
   case TypeK:
     p1 = tree->child[0];
@@ -229,12 +249,10 @@ static void genStmt(TreeNode *tree)
     decreaseSubroutineLevel();
     break;
   case ArrDeclK:
-    if (TraceCode)
-      emitComment("-> arrDecl");
+
     break;
   case WriteK:
-    if (TraceCode)
-      emitComment("-> write");
+
     break;
     // case ReadK:
     //    emitRO("IN",ac,0,0,"read integer value");

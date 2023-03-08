@@ -1,6 +1,10 @@
 
-int f(int x, int y)
+int f(void)
 {
+  int x;
+  int y;
+  x = 2;
+  y = 3;
   return x + y + 1;
 }
 
