@@ -1,4 +1,11 @@
-void main(void) {
+
+int f(int x, int y)
+{
+  return x + y + 1;
+}
+
+void main(void)
+{
   int a;
   int x;
   int z;

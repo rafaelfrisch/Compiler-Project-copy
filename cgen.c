@@ -129,8 +129,6 @@ static void genStmt(TreeNode *tree)
   {
 
   case IfK:
-    if (TraceCode)
-      emitComment("-> if");
     // p1 = tree->child[0];
     // p2 = tree->child[1];
     // p3 = tree->child[2];
@@ -157,8 +155,6 @@ static void genStmt(TreeNode *tree)
     break; /* if_k */
 
   case RepeatK:
-    if (TraceCode)
-      emitComment("-> repeat");
     p1 = tree->child[0];
     p2 = tree->child[1];
     savedLoc1 = emitSkip(0);
@@ -173,8 +169,6 @@ static void genStmt(TreeNode *tree)
     break; /* repeat */
 
   case AssignK:
-    if (TraceCode)
-      emitCommentWithLine("-> assign", tree->lineno);
     // /* generate code for rhs */
     p1 = tree->child[0];
     p2 = tree->child[1];
@@ -206,20 +200,12 @@ static void genStmt(TreeNode *tree)
       emitCommentWithLine("<- assign", tree->lineno);
     break; /* assign_k */
   case DeclK:
-    if (TraceCode)
-      emitComment("-> decl");
     break;
   case ActivK:
-    if (TraceCode)
-      emitComment("-> activ");
     break;
   case RetK:
-    if (TraceCode)
-      emitComment("-> ret");
     break;
   case TypeK:
-    if (TraceCode)
-      emitComment("-> type");
     p1 = tree->child[0];
     if (p1->kind.stmt == FuncDeclK)
     {
@@ -228,19 +214,9 @@ static void genStmt(TreeNode *tree)
 
     break;
   case VarDeclK:
-    if (TraceCode)
-    {
-      emitComment("-> vardecl");
-      emitComment(tree->attr.name);
-    }
 
     break;
   case FuncDeclK:
-    if (TraceCode)
-    {
-      emitComment("-> funcDecl");
-      emitComment(tree->attr.name);
-    }
     fprintf(code, "%s:\n", tree->attr.name);
     increaseSubroutineLevel();
     p1 = tree->child[0];
@@ -288,8 +264,6 @@ static void genExp(TreeNode *tree)
 
   {
   case ConstK:
-    if (TraceCode)
-      emitComment("-> Const");
     /* gen code to load integer constant using LDC */
     emitRM("LDC", ac, tree->attr.val, "load const");
     if (TraceCode)
@@ -297,16 +271,12 @@ static void genExp(TreeNode *tree)
     break; /* ConstK */
 
   case IdK:
-    if (TraceCode)
-      emitComment("-> Id");
     emitRM("LD", ac, gp, "load id value");
     if (TraceCode)
       emitComment("<- Id");
     break; /* IdK */
 
   case OpK:
-    if (TraceCode)
-      emitComment("-> Op");
     p1 = tree->child[0];
     p2 = tree->child[1];
     /* gen code for ac = left arg */
@@ -368,11 +338,11 @@ static void cGen(TreeNode *tree)
     switch (tree->nodekind)
     {
     case StmtK:
-      emitComment("Stmk");
+      emitCommentNodeKind(tree);
       genStmt(tree);
       break;
     case ExpK:
-      emitComment("Expk");
+      emitCommentNodeKind(tree);
       genExp(tree);
       break;
     default:

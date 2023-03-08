@@ -27,24 +27,125 @@ static int subRoutineLevel = 0;
 /* Procedure emitComment prints a comment line
  * with comment c in the code file
  */
-void printSubRoutine() {
-  for (int i = 0; i < subRoutineLevel; i++) {
+void printSubRoutine()
+{
+  for (int i = 0; i < subRoutineLevel; i++)
+  {
     fprintf(code, "\t");
   }
 }
 
 void emitComment(char *c)
 {
-  if (TraceCode) {
+  if (TraceCode)
+  {
     printSubRoutine();
     fprintf(code, "* %s\n", c);
   }
-    
+}
+
+void emitCommentNodeKind(TreeNode *tree)
+{
+  switch (tree->nodekind)
+  {
+  case StmtK:
+
+    switch (tree->kind.stmt)
+    {
+
+    case IfK:
+      if (TraceCode)
+        emitCommentWithLine("-> if", tree->lineno);
+      break; /* if_k */
+
+    case RepeatK:
+      if (TraceCode)
+        emitCommentWithLine("-> repeat", tree->lineno);
+      break; /* repeat */
+
+    case AssignK:
+      if (TraceCode)
+        emitCommentWithLine("-> assign", tree->lineno);
+      break; /* assign_k */
+    case DeclK:
+      if (TraceCode)
+        emitCommentWithLine("-> decl", tree->lineno);
+      break;
+    case ActivK:
+      if (TraceCode)
+        emitCommentWithLine("-> activ", tree->lineno);
+      break;
+    case RetK:
+      if (TraceCode)
+        emitCommentWithLine("-> ret", tree->lineno);
+      break;
+    case TypeK:
+      if (TraceCode)
+        emitCommentWithLine("-> type", tree->lineno);
+
+      break;
+    case VarDeclK:
+      if (TraceCode)
+      {
+        emitCommentWithLine("-> vardecl", tree->lineno);
+      }
+
+      break;
+    case FuncDeclK:
+      if (TraceCode)
+      {
+        emitCommentWithLine("-> funcDecl", tree->lineno);
+        emitComment(tree->attr.name);
+      }
+      break;
+    case ArrDeclK:
+      if (TraceCode)
+        emitCommentWithLine("-> arrDecl", tree->lineno);
+      break;
+    case WriteK:
+      if (TraceCode)
+        emitCommentWithLine("-> write", tree->lineno);
+      break;
+    default:
+      if (TraceCode)
+        emitCommentWithLine("-> break", tree->lineno);
+      break;
+    }
+    break;
+  case ExpK:
+
+    switch (tree->kind.exp)
+
+    {
+    case ConstK:
+      if (TraceCode)
+        emitCommentWithLine("-> Const", tree->lineno);
+      /* gen code to load integer constant using LDC */
+      break; /* ConstK */
+
+    case IdK:
+      if (TraceCode)
+        emitCommentWithLine("-> Id", tree->lineno);
+      break; /* IdK */
+
+    case OpK:
+      if (TraceCode)
+        emitCommentWithLine("-> Op", tree->lineno);
+      break; /* OpK */
+
+    default:
+      break;
+    }
+    break;
+  default:
+    break;
+  }
 }
 
 void emitCommentWithLine(char *c, int line)
 {
-  if (TraceCode) {
+  if (TraceCode)
+  {
     printSubRoutine();
     fprintf(code, "* %s line: %d\n", c, line);
   }
@@ -62,11 +163,13 @@ void emitTimeOfCompilation()
   }
 }
 
-void increaseSubroutineLevel() {
-  subRoutineLevel++;  
+void increaseSubroutineLevel()
+{
+  subRoutineLevel++;
 }
 
-void decreaseSubroutineLevel() {
+void decreaseSubroutineLevel()
+{
   subRoutineLevel--;
 }
 
@@ -153,7 +256,8 @@ void emitAssign()
     highEmitLoc = emitLoc;
 }
 
-int getRegisterNumber(){
+int getRegisterNumber()
+{
   return registerNumber;
 }
 

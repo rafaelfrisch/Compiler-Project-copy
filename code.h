@@ -90,6 +90,8 @@ void decreaseSubroutineLevel();
 
 void printSubroutine();
 
+void emitCommentNodeKind(TreeNode *tree);
+
 /* Procedure emitRM_Abs converts an absolute reference
  * to a pc-relative reference when emitting a
  * register-to-memory TM instruction
