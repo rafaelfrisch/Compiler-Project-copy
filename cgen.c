@@ -99,9 +99,7 @@ static int cGenAssign(TreeNode *tree)
         break;
       case IdK:
         p1 = tree->child[0];
-        p2 = tree->child[1];
         firstRegister = cGenAssign(p1);
-        secondRegister = cGenAssign(p2);
         break;
       case ConstK:
         break;
