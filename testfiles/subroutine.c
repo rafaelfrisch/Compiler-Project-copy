@@ -4,6 +4,10 @@ void f(int z, int a)
   a = z;
 }
 
+int testFunction(int z) {
+  return z;
+}
+
 void main(void)
 {
   int a;
@@ -14,5 +18,6 @@ void main(void)
   a = 3;
 
   f(z, a);
+  a = testFunction(z);
   return x;
 }

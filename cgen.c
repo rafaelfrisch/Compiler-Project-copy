@@ -53,6 +53,11 @@ static int cGenAssign(TreeNode *tree)
     case StmtK:
       switch (tree->kind.stmt)
       {
+      case ActivK:
+        int numParams;
+        numParams = printNumParams(tree);
+        fprintf(code, "call %s,%d\n", tree->attr.name, numParams);
+        break;
       default:
         if (TraceCode)
           emitComment("-> break cgenStmtk");
