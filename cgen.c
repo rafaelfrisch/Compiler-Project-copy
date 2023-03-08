@@ -202,6 +202,9 @@ static void genStmt(TreeNode *tree)
   case DeclK:
     break;
   case ActivK:
+    int numParams;
+    numParams = printNumParams(tree);
+    fprintf(code, "call %s,%d\n", tree->attr.name, numParams);
     break;
   case RetK:
     p1 = tree->child[0];

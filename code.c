@@ -261,6 +261,19 @@ int getRegisterNumber()
   return registerNumber;
 }
 
+int printNumParams(TreeNode *tree) {
+  TreeNode *p;
+  int numParams = 0;
+  p = tree->child[0];
+  while (p != NULL && (p->kind.stmt == IdK)) {
+    fprintf(code, "param %s\n", p->attr.name);
+
+    p = p->sibling;
+    numParams++;
+  }
+  return numParams;
+}
+
 /* Function emitSkip skips "howMany" code
  * locations for later backpatch. It also
  * returns the current code position
