@@ -166,12 +166,12 @@ static void genStmt(TreeNode *tree)
     p2 = tree->child[1];
     p3 = tree->child[2];
 
-    cGen(p2);
+    cGen(p3);
 
     emitElse();
     emitDeviation();
 
-    cGen(p3);
+    cGen(p2);
 
     emitDeviation();
   
