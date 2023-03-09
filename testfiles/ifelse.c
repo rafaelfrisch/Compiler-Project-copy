@@ -9,12 +9,14 @@ void main(void)
   d = 4;
   if (a == d)
   {
-    b = 0;
+    b = 1;
+    b = 2;
     b = 3;
   }
   else
   {
-    b = 1;
+    b = 4;
+    b = 5;
   }
   d = 5;
 }

@@ -126,7 +126,7 @@ static int cGenAssign(TreeNode *tree)
 /* Procedure genStmt generates code at a statement node */
 static void genStmt(TreeNode *tree)
 {
-  TreeNode *p1, *p2, *p3;
+  TreeNode *p1, *p2, *p3, *p4;
   int savedLoc1, savedLoc2, currentLoc;
   int firstRegister, secondRegister;
   int loc;
@@ -162,7 +162,19 @@ static void genStmt(TreeNode *tree)
     fprintf(code, "\n");
 
     emitIf();
-    // check else
+
+    p2 = tree->child[1];
+    p3 = tree->child[2];
+
+    cGen(p2);
+
+    emitElse();
+    emitDeviation();
+
+    cGen(p3);
+
+    emitDeviation();
+  
     if (TraceCode)
       emitCommentWithLine("<- if", tree->lineno);
     break; /* if_k */

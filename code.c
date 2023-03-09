@@ -24,7 +24,7 @@ static int registerNumber = 0;
 
 static int subRoutineLevel = 0;
 
-static int deviationLevel = 0; 
+static int deviationLevel = 0;
 
 /* Procedure emitComment prints a comment line
  * with comment c in the code file
@@ -175,7 +175,6 @@ void decreaseSubroutineLevel()
   subRoutineLevel--;
 }
 
-
 void printDeviation()
 {
   for (int i = 0; i < deviationLevel; i++)
@@ -198,7 +197,25 @@ void emitDeviationAssign()
 void emitIf()
 {
   printSubRoutine();
-  fprintf(code, "%3d:  if_true goto L%d \n", emitLoc++, deviationLevel);
+  fprintf(code, "%3d:  if_true t%d goto L%d \n", emitLoc++, registerNumber-1, deviationLevel);
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+}
+
+void emitElse()
+{
+  printSubRoutine();
+  fprintf(code, "%3d:  goto L%d \n", emitLoc++, deviationLevel + 1);
+
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+}
+
+void emitDeviation()
+{
+  printSubRoutine();
+  fprintf(code, "%3d:  L%d: \n", emitLoc++, deviationLevel);
+  deviationLevel++;
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
 }
@@ -291,11 +308,13 @@ int getRegisterNumber()
   return registerNumber;
 }
 
-int printNumParams(TreeNode *tree) {
+int printNumParams(TreeNode *tree)
+{
   TreeNode *p;
   int numParams = 0;
   p = tree->child[0];
-  while (p != NULL && (p->kind.stmt == IdK)) {
+  while (p != NULL && (p->kind.stmt == IdK))
+  {
     fprintf(code, "param %s\n", p->attr.name);
 
     p = p->sibling;
