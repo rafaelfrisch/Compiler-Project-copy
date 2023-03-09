@@ -24,6 +24,8 @@ static int registerNumber = 0;
 
 static int subRoutineLevel = 0;
 
+static int deviationLevel = 0; 
+
 /* Procedure emitComment prints a comment line
  * with comment c in the code file
  */
@@ -173,6 +175,24 @@ void decreaseSubroutineLevel()
   subRoutineLevel--;
 }
 
+
+void printDeviation()
+{
+  for (int i = 0; i < deviationLevel; i++)
+  {
+    fprintf(code, "\t");
+  }
+}
+
+void emitDeviationAssign()
+{
+  fprintf(code, "%3d:  t%d = ", emitLoc++, registerNumber);
+
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+  registerNumber++;
+  deviationLevel++;
+}
 char *getOpChar(TreeNode *tree)
 {
   switch (tree->attr.op)
@@ -192,7 +212,7 @@ char *getOpChar(TreeNode *tree)
   case LT:
     return "<";
     break;
-  case EQ:
+  case EQEQ:
     return "==";
     break;
   default:

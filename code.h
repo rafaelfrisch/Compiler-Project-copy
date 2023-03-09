@@ -94,6 +94,8 @@ void emitCommentNodeKind(TreeNode *tree);
 
 int printNumParams(TreeNode *tree);
 
+void emitDeviationAssign();
+
 /* Procedure emitRM_Abs converts an absolute reference
  * to a pc-relative reference when emitting a
  * register-to-memory TM instruction
