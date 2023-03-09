@@ -197,7 +197,7 @@ void emitDeviationAssign()
 void emitIf()
 {
   printSubRoutine();
-  fprintf(code, "%3d:  if_true t%d goto L%d \n", emitLoc++, registerNumber-1, deviationLevel);
+  fprintf(code, "%3d:  if_true t%d goto L%d \n", emitLoc++, registerNumber - 1, deviationLevel);
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
 }
@@ -216,6 +216,38 @@ void emitDeviation()
   printSubRoutine();
   fprintf(code, "%3d:  L%d: \n", emitLoc++, deviationLevel);
   deviationLevel++;
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+}
+
+void emitWhileDeviation()
+{
+  printSubRoutine();
+  fprintf(code, "%3d: L%d: t%d = ", emitLoc++, deviationLevel + 1, registerNumber);
+
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+  registerNumber++;
+  deviationLevel++;
+}
+
+void emitWhile()
+{
+  printSubRoutine();
+  fprintf(code, "%3d:  if_true t%d goto L%d \n", emitLoc++, registerNumber - 1, deviationLevel + 1);
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+  deviationLevel++;
+}
+
+void emitEndWhile()
+{
+  printSubRoutine();
+  fprintf(code, "%3d:  goto L%d \n", emitLoc++, deviationLevel - 1);
+
+  printSubRoutine();
+  fprintf(code, "%3d: L%d:\n", emitLoc++, deviationLevel);
+
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
 }
@@ -239,14 +271,55 @@ char *getOpChar(TreeNode *tree)
   case LT:
     return "<";
     break;
+  case GT:
+    return ">";
+    break;
+  case GEQ:
+    return ">=";
+    break;
+  case LEQ:
+    return "<=";
+    break;
   case EQEQ:
     return "==";
+    break;
+  case INEQ:
+    return "!=";
     break;
   default:
     return "BUG: Unknown operator";
     break;
   }
 }
+
+char *getOpOpositeChar(TreeNode *tree)
+{
+  switch (tree->attr.op)
+  {
+  case LT:
+    return ">=";
+    break;
+  case GT:
+    return "<=";
+    break;
+  case GEQ:
+    return "<";
+    break;
+  case LEQ:
+    return ">";
+    break;
+  case EQEQ:
+    return "==";
+    break;
+  case INEQ:
+    return "==";
+
+  default:
+    return "BUG: Unknown operator";
+    break;
+  }
+}
+
 /* Procedure emitRO emits a register-only
  * TM instruction
  * op = the opcode

@@ -41,6 +41,8 @@ void emitCommentWithLine(char *c, int line);
 void emitTimeOfCompilation();
 
 char *getOpChar(TreeNode *tree);
+
+char *getOpOpositeChar(TreeNode *tree);
 /* Procedure emitRO emits a register-only
  * TM instruction
  * op = the opcode
@@ -101,6 +103,12 @@ void emitIf();
 void emitElse();
 
 void emitDeviation();
+
+void emitWhileDeviation();
+
+void emitWhile();
+
+void emitEndWhile();
 
 /* Procedure emitRM_Abs converts an absolute reference
  * to a pc-relative reference when emitting a

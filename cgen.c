@@ -155,7 +155,7 @@ static void genStmt(TreeNode *tree)
     {
       fprintf(code, "%s", p3->attr.name);
     }
-    else if (p2->kind.exp == ConstK)
+    else if (p3->kind.exp == ConstK)
     {
       fprintf(code, "%d", p3->attr.val);
     }
@@ -181,14 +181,36 @@ static void genStmt(TreeNode *tree)
 
   case RepeatK:
     p1 = tree->child[0];
+    p2 = p1->child[0];
+    p3 = p1->child[1];
+    emitWhileDeviation();
+
+    if (p2->kind.exp == IdK)
+    {
+      fprintf(code, "%s", p2->attr.name);
+    }
+    else if (p2->kind.exp == ConstK)
+    {
+      fprintf(code, "%d", p2->attr.val);
+    }
+
+    fprintf(code, " %s ", getOpOpositeChar(p1));
+
+    if (p3->kind.exp == IdK)
+    {
+      fprintf(code, "%s", p3->attr.name);
+    }
+    else if (p3->kind.exp == ConstK)
+    {
+      fprintf(code, "%d", p3->attr.val);
+    }
+    fprintf(code, "\n");
+    emitWhile();
+    
     p2 = tree->child[1];
-    savedLoc1 = emitSkip(0);
-    emitComment("repeat: jump after body comes back here");
-    /* generate code for body */
-    cGen(p1);
-    /* generate code for test */
     cGen(p2);
-    emitRM_Abs("JEQ", ac, savedLoc1, "repeat: jmp back to body");
+    emitEndWhile();
+
     if (TraceCode)
       emitComment("<- repeat");
     break; /* repeat */
