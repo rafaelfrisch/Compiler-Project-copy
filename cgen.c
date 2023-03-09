@@ -161,8 +161,8 @@ static void genStmt(TreeNode *tree)
     }
     fprintf(code, "\n");
 
-    fprintf(code, "if_true goto L1");
-
+    emitIf();
+    // check else
     if (TraceCode)
       emitCommentWithLine("<- if", tree->lineno);
     break; /* if_k */

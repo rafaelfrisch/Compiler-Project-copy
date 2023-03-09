@@ -186,6 +186,7 @@ void printDeviation()
 
 void emitDeviationAssign()
 {
+  printSubRoutine();
   fprintf(code, "%3d:  t%d = ", emitLoc++, registerNumber);
 
   if (highEmitLoc < emitLoc)
@@ -193,6 +194,15 @@ void emitDeviationAssign()
   registerNumber++;
   deviationLevel++;
 }
+
+void emitIf()
+{
+  printSubRoutine();
+  fprintf(code, "%3d:  if_true goto L%d \n", emitLoc++, deviationLevel);
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+}
+
 char *getOpChar(TreeNode *tree)
 {
   switch (tree->attr.op)

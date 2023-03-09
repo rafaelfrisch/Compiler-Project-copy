@@ -10,9 +10,11 @@ void main(void)
   if (a == d)
   {
     b = 0;
+    b = 3;
   }
   else
   {
     b = 1;
   }
+  d = 5;
 }
