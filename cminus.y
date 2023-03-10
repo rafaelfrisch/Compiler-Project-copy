@@ -321,7 +321,7 @@ arg_list    : arg_list COMMA exp {
                   while (t->sibling != NULL) {
                     t = t->sibling;
                   }
-                  $$->sibling = $3;
+                  t->sibling = $3;
                   $$ = $1;
                 } else {
                   $$ = $3;
