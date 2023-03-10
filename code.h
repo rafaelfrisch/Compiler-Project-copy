@@ -112,5 +112,6 @@ void emitEndWhile();
 
 void emitArrayAssign(TreeNode *tree);
 
+void emitArrayAtribution(TreeNode *tree);
 
 #endif

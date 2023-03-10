@@ -396,6 +396,27 @@ void emitArrayAssign(TreeNode *tree)
     highEmitLoc = emitLoc;
 }
 
+void emitArrayAtribution(TreeNode *tree)
+{
+  printSubRoutine();
+  fprintf(code, "t%d = ", registerNumber);
+
+  if (tree->child[0]->kind.exp == IdK)
+  {
+    fprintf(code, "%s", tree->child[0]->attr.name);
+  }
+  else if (tree->child[0]->kind.exp == ConstK)
+  {
+    fprintf(code, "%d", tree->child[0]->attr.val);
+  }
+
+  fprintf(code, " * 4 \n");
+  registerNumber++;
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+}
+
+
 int getRegisterNumber()
 {
   return registerNumber;

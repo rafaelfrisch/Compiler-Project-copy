@@ -224,6 +224,16 @@ static void genStmt(TreeNode *tree)
     {
       numParams = printNumParams(p2);
     }
+    if (firstRegister == secondRegister)
+    {
+      if (p2->kind.exp == IdK)
+      {
+        if (p2->child[0] != NULL)
+        {
+          emitArrayAtribution(p2);
+        }
+      }
+    }
     emitAssign();
     if (tree->child[0]->child[0] != NULL)
     {
@@ -237,7 +247,12 @@ static void genStmt(TreeNode *tree)
     {
       if (p2->kind.exp == IdK)
       {
-        fprintf(code, "%s\n", p2->attr.name);
+        fprintf(code, "%s", p2->attr.name);
+        if (p2->child[0] != NULL)
+        {
+          fprintf(code, "[t%d]", getRegisterNumber()-1);
+        }
+        fprintf(code, "\n");
       }
       else if (p2->kind.exp == ConstK)
       {
