@@ -186,7 +186,7 @@ void printDeviation()
 void emitDeviationAssign()
 {
   printSubRoutine();
-  fprintf(code, "%3d:  t%d = ", emitLoc++, registerNumber);
+  fprintf(code, " t%d = ", registerNumber);
 
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
@@ -197,7 +197,7 @@ void emitDeviationAssign()
 void emitIf()
 {
   printSubRoutine();
-  fprintf(code, "%3d: if_true t%d goto L%d \n", emitLoc++, registerNumber - 1, deviationLevel);
+  fprintf(code, "if_true t%d goto L%d \n", registerNumber - 1, deviationLevel);
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
 }
@@ -205,7 +205,7 @@ void emitIf()
 void emitElse()
 {
   printSubRoutine();
-  fprintf(code, "%3d: goto L%d \n", emitLoc++, deviationLevel + 1);
+  fprintf(code, "goto L%d \n", deviationLevel + 1);
 
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
@@ -214,7 +214,7 @@ void emitElse()
 void emitDeviation()
 {
   printSubRoutine();
-  fprintf(code, "%3d:  L%d: \n", emitLoc++, deviationLevel);
+  fprintf(code, " L%d: \n", deviationLevel);
   deviationLevel++;
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
@@ -223,7 +223,7 @@ void emitDeviation()
 void emitWhileDeviation()
 {
   printSubRoutine();
-  fprintf(code, "%3d: L%d: t%d = ", emitLoc++, deviationLevel + 1, registerNumber);
+  fprintf(code, "L%d: t%d = ", deviationLevel + 1, registerNumber);
 
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
@@ -234,7 +234,7 @@ void emitWhileDeviation()
 void emitWhile()
 {
   printSubRoutine();
-  fprintf(code, "%3d: if_true t%d goto L%d \n", emitLoc++, registerNumber - 1, deviationLevel + 1);
+  fprintf(code, "if_true t%d goto L%d \n", registerNumber - 1, deviationLevel + 1);
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
   deviationLevel++;
@@ -243,10 +243,10 @@ void emitWhile()
 void emitEndWhile()
 {
   printSubRoutine();
-  fprintf(code, "%3d: goto L%d \n", emitLoc++, deviationLevel - 1);
+  fprintf(code, "goto L%d \n", deviationLevel - 1);
 
   printSubRoutine();
-  fprintf(code, "%3d: L%d:\n", emitLoc++, deviationLevel);
+  fprintf(code, "L%d:\n", deviationLevel);
 
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
@@ -331,7 +331,7 @@ char *getOpOpositeChar(TreeNode *tree)
 void emitRO(char *op, int r, int s, int t, char *c)
 {
   printSubRoutine();
-  fprintf(code, "%3d:  %5s  %d,%d,%d ", emitLoc++, op, r, s, t);
+  fprintf(code, " %5s  %d,%d,%d ", op, r, s, t);
   if (TraceCode)
     fprintf(code, "\t%s", c);
   fprintf(code, "\n");
@@ -350,7 +350,7 @@ void emitRO(char *op, int r, int s, int t, char *c)
 void emitRM(char *op, int r, int s, char *c)
 {
   printSubRoutine();
-  fprintf(code, "%3d:  %5s  %d(%d) ", emitLoc++, op, r, s);
+  fprintf(code, " %5s  %d(%d) ", op, r, s);
   if (TraceCode)
     fprintf(code, "\t%s", c);
   fprintf(code, "\n");
@@ -361,7 +361,7 @@ void emitRM(char *op, int r, int s, char *c)
 void emitOpAssign(char *op)
 {
   printSubRoutine();
-  fprintf(code, "%3d: t%d = ", emitLoc++, registerNumber);
+  fprintf(code, "t%d = ", registerNumber);
 
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
@@ -371,7 +371,6 @@ void emitOpAssign(char *op)
 void emitAssign()
 {
   printSubRoutine();
-  fprintf(code, "%3d: ", emitLoc++);
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
 }
@@ -391,7 +390,7 @@ void emitArrayAssign(TreeNode *tree)
 
   fprintf(code, " * 4 \n");
   printSubRoutine();
-  fprintf(code, "%3d: %s[t%d] = ", emitLoc++, tree->attr.name, registerNumber);
+  fprintf(code, "%s[t%d] = ", tree->attr.name, registerNumber);
   registerNumber++;
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
@@ -410,7 +409,7 @@ int printNumParams(TreeNode *tree)
   while (p != NULL && (p->kind.stmt == IdK))
   {
     printSubRoutine();
-    fprintf(code, "%3d: param %s\n", emitLoc++, p->attr.name);
+    fprintf(code, "param %s\n", p->attr.name);
 
     p = p->sibling;
     numParams++;
@@ -458,14 +457,3 @@ void emitRestore(void)
  * a = the absolute location in memory
  * c = a comment to be printed if TraceCode is TRUE
  */
-void emitRM_Abs(char *op, int r, int a, char *c)
-{
-  fprintf(code, "%3d:  %5s  %d,%d(%d) ",
-          emitLoc, op, r, a - (emitLoc + 1), pc);
-  ++emitLoc;
-  if (TraceCode)
-    fprintf(code, "\t%s", c);
-  fprintf(code, "\n");
-  if (highEmitLoc < emitLoc)
-    highEmitLoc = emitLoc;
-} /* emitRM_Abs */
