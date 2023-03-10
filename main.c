@@ -49,7 +49,7 @@ int EchoSource = FALSE;
 int TraceScan = FALSE;
 int TraceParse = TRUE;
 int TraceAnalyze = FALSE;
-int TraceCode = FALSE;
+int TraceCode = TRUE;
 
 // // Intermediate code
 // int EchoSource = FALSE;

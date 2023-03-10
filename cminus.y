@@ -50,12 +50,16 @@ decl_list    : decl_list decl {
 decl        : var_decl { $$ = $1; }
             | fun_decl { $$ = $1; }
             ;
-var_decl    : type_spec ID { savedName = copyString(globalId); savedLineNo = lineno;} SEMI {
+var_decl    : type_spec ID {
                 $$ = $1;
+                savedName = copyString(globalId);
+                savedLineNo = lineno;
                 $$->child[0] = newStmtNode(VarDeclK);
                 $$->child[0]->attr.name = savedName;
                 $$->child[0]->lineno = savedLineNo;
-              }
+                } SEMI {
+                  $$ = $3;
+                }
             | type_spec ID {
                 savedName = copyString(globalId);
                 savedLineNo = lineno;
@@ -102,17 +106,21 @@ param_list  : param_list COMMA param {
                   while (t->sibling != NULL) {
                     t = t->sibling;
                   }
-                  $$->sibling = $3;
+                  t->sibling = $3;
                   $$ = $1;
                 } else { $$ = $3; }
             }
             | param { $$ = $1; }
             ;
-param       : type_spec ID { savedName = copyString(globalId); savedLineNo = lineno; } {
+param       : type_spec ID {
+                savedName = copyString(globalId); 
+                savedLineNo = lineno;
                 $$ = $1;
                 $$->child[0] = newStmtNode(VarDeclK);
                 $$->child[0]->attr.name = savedName;
                 $$->child[0]->lineno = lineno;
+                } {
+                $$ = $3;
             }
             | type_spec ID { savedName = copyString(globalId); savedLineNo = lineno; }  LBRACKETS RBRACKETS {
                 $$ = $1;
@@ -138,7 +146,7 @@ loc_decl    : loc_decl var_decl {
                   while (t->sibling != NULL) {
                     t = t->sibling;
                   }
-                  $$->sibling = $2;
+                  t->sibling = $2;
                   $$ = $1;
                 } else { $$ = $2; }
             }
@@ -203,7 +211,8 @@ exp         : var EQ exp {
             ;
 var         : ID {
                   $$ = newExpNode(IdK);
-                  $$->attr.name = copyString(globalId); }
+                  $$->attr.name = copyString(globalId);
+                  $$->lineno = savedLineNo; }
             | ID {
               savedName = copyString(globalId);
               savedLineNo = lineno;
