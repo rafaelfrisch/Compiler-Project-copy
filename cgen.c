@@ -305,12 +305,8 @@ static void genStmt(TreeNode *tree)
   case FuncDeclK:
     fprintf(code, "%s:\n", tree->attr.name);
     increaseSubroutineLevel();
-    p1 = tree->child[0];
+    p1 = tree->child[1];
     // check case foi void main(void)
-    if (tree->child[0] == NULL)
-    {
-      p1 = tree->child[1];
-    }
     cGen(p1);
     decreaseSubroutineLevel();
     break;

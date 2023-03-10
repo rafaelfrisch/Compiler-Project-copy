@@ -1,6 +1,7 @@
 void f(void)
 {
-
+  int x;
+  x = 3;
 }
 
 int calc(int a, int b) {
