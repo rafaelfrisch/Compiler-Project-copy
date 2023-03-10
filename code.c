@@ -427,10 +427,16 @@ int printNumParams(TreeNode *tree)
   TreeNode *p;
   int numParams = 0;
   p = tree->child[0];
-  while (p != NULL && (p->kind.stmt == IdK))
+  while (p != NULL && (p->kind.stmt == IdK || p->kind.stmt == ActivK || p->kind.exp == ConstK))
   {
     printSubRoutine();
-    fprintf(code, "param %s\n", p->attr.name);
+    if (p->kind.exp == ConstK) {
+      fprintf(code, "param %d\n", p->attr.val);
+    }
+    else {
+      fprintf(code, "param %s\n", p->attr.name);
+    }
+    
 
     p = p->sibling;
     numParams++;

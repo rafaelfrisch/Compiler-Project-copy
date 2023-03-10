@@ -20,7 +20,7 @@ int minloc ( int a[], int low, int high ){
 void sort(int a[], int low, int high){
    int i;   int k;
    i = low;
-   while(i < high - 1){
+   while(i <= high){
       int t;
       k = minloc(a,i,high);
       t = a[k];
