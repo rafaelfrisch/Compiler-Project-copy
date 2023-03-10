@@ -54,10 +54,7 @@ static int cGenAssign(TreeNode *tree)
       switch (tree->kind.stmt)
       {
       case ActivK:
-        int numParams;
-        numParams = printNumParams(tree);
-        printSubRoutine();
-        fprintf(code, "call %s,%d\n", tree->attr.name, numParams);
+
         break;
       default:
         if (TraceCode)
@@ -222,6 +219,11 @@ static void genStmt(TreeNode *tree)
     p2 = tree->child[1];
     firstRegister = cGenAssign(p1);
     secondRegister = cGenAssign(p2);
+
+    if (p2->kind.exp == ActivK)
+    {
+      numParams = printNumParams(p2);
+    }
     emitAssign();
     if (tree->child[0]->child[0] != NULL)
     {
@@ -240,6 +242,11 @@ static void genStmt(TreeNode *tree)
       else if (p2->kind.exp == ConstK)
       {
         fprintf(code, "%d\n", p2->attr.val);
+      }
+      else if (p2->kind.exp == ActivK)
+      {
+
+        fprintf(code, "call %s,%d\n", p2->attr.name, numParams);
       }
     }
     else
