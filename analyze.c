@@ -116,7 +116,7 @@ static void insertNode( TreeNode * t)
           varIsNotGlobal = st_lookup(t->attr.name, "global");
           varIsNotOnCurrentScope = st_lookup(t->attr.name, currentScope);
           if (varIsNotOnCurrentScope == -1 && varIsNotGlobal == -1) {
-            semanticError(t, "variável não declarada");;
+            semanticError(t, "variável não declarada");
           }
           if (varIsNotGlobal != -1) {
             st_insert(t->attr.name,t->lineno,location++,t->decl,t->type, "global");

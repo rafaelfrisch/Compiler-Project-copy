@@ -3,13 +3,13 @@ int x[10];
 
 /* low nao eh declarada na tabela de simbolos, corrigir esse bug de sintaxe */
 int minloc ( int a[], int low, int high ){
-   int i;   int x;   int k;
+   int i;   int y;   int k;
    k = low;
-   x = a[low];
+   y = a[low];
    i = low + 1;
    while(i<high){
-      if(a[i] < x){
-         x = a[i];
+      if(a[i] < y){
+         y = a[i];
          k = i;
       }
       i = i + 1;
