@@ -56,6 +56,7 @@ static int cGenAssign(TreeNode *tree)
       case ActivK:
         int numParams;
         numParams = printNumParams(tree);
+        printSubRoutine();
         fprintf(code, "call %s,%d\n", tree->attr.name, numParams);
         break;
       default:
@@ -258,6 +259,7 @@ static void genStmt(TreeNode *tree)
   case ActivK:
 
     numParams = printNumParams(tree);
+    printSubRoutine();
     fprintf(code, "call %s,%d\n", tree->attr.name, numParams);
     break;
   case RetK:
@@ -310,6 +312,7 @@ static void genStmt(TreeNode *tree)
     break;
   case WriteK:
     numParams = printNumParams(tree);
+    printSubRoutine();
     fprintf(code, "call %s,%d\n", tree->attr.name, numParams);
     break;
     // case WriteK:
@@ -442,12 +445,9 @@ void codeGen(TreeNode *syntaxTree, char *codefile)
   emitTimeOfCompilation();
   /* generate standard prelude */
   emitComment("Standard prelude:");
-  emitRM("LD", mp, ac, "load maxaddress from location 0");
-  emitRM("ST", ac, ac, "clear location 0");
   emitComment("End of standard prelude.");
   /* generate code for TINY program */
   cGen(syntaxTree);
   /* finish */
   emitComment("End of execution.");
-  emitRO("HALT", 0, 0, 0, "");
 }

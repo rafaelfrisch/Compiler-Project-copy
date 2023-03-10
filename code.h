@@ -90,7 +90,7 @@ void increaseSubroutineLevel();
 
 void decreaseSubroutineLevel();
 
-void printSubroutine();
+void printSubRoutine();
 
 void emitCommentNodeKind(TreeNode *tree);
 
