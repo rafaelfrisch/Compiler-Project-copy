@@ -115,6 +115,13 @@ static void insertNode( TreeNode * t)
         case AssignK:
           varIsNotGlobal = st_lookup(t->attr.name, "global");
           varIsNotOnCurrentScope = st_lookup(t->attr.name, currentScope);
+
+          if(t->child[1]->kind.stmt == ActivK && !(strcmp(t->child[1]->attr.name, "input") == 0 || strcmp(t->child[1]->attr.name, "output") == 0)) { 
+            if (t->child[1]->type != t->type) {
+              semanticError(t, "atribuição inválida");
+            }
+          }
+
           if (varIsNotOnCurrentScope == -1 && varIsNotGlobal == -1) {
             semanticError(t, "variável não declarada");
           }
