@@ -197,7 +197,7 @@ void emitDeviationAssign()
 void emitIf()
 {
   printSubRoutine();
-  fprintf(code, "%3d:  if_true t%d goto L%d \n", emitLoc++, registerNumber - 1, deviationLevel);
+  fprintf(code, "%3d: if_true t%d goto L%d \n", emitLoc++, registerNumber - 1, deviationLevel);
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
 }
@@ -205,7 +205,7 @@ void emitIf()
 void emitElse()
 {
   printSubRoutine();
-  fprintf(code, "%3d:  goto L%d \n", emitLoc++, deviationLevel + 1);
+  fprintf(code, "%3d: goto L%d \n", emitLoc++, deviationLevel + 1);
 
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
@@ -234,7 +234,7 @@ void emitWhileDeviation()
 void emitWhile()
 {
   printSubRoutine();
-  fprintf(code, "%3d:  if_true t%d goto L%d \n", emitLoc++, registerNumber - 1, deviationLevel + 1);
+  fprintf(code, "%3d: if_true t%d goto L%d \n", emitLoc++, registerNumber - 1, deviationLevel + 1);
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
   deviationLevel++;
@@ -243,7 +243,7 @@ void emitWhile()
 void emitEndWhile()
 {
   printSubRoutine();
-  fprintf(code, "%3d:  goto L%d \n", emitLoc++, deviationLevel - 1);
+  fprintf(code, "%3d: goto L%d \n", emitLoc++, deviationLevel - 1);
 
   printSubRoutine();
   fprintf(code, "%3d: L%d:\n", emitLoc++, deviationLevel);
@@ -361,7 +361,7 @@ void emitRM(char *op, int r, int s, char *c)
 void emitOpAssign(char *op)
 {
   printSubRoutine();
-  fprintf(code, "%3d:  t%d = ", emitLoc++, registerNumber);
+  fprintf(code, "%3d: t%d = ", emitLoc++, registerNumber);
 
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
@@ -372,6 +372,27 @@ void emitAssign()
 {
   printSubRoutine();
   fprintf(code, "%3d: ", emitLoc++);
+  if (highEmitLoc < emitLoc)
+    highEmitLoc = emitLoc;
+}
+
+void emitArrayAssign(TreeNode *tree)
+{
+  fprintf(code, "t%d = ", registerNumber);
+
+  if (tree->child[0]->kind.exp == IdK)
+  {
+    fprintf(code, "%s", tree->child[0]->attr.name);
+  }
+  else if (tree->child[0]->kind.exp == ConstK)
+  {
+    fprintf(code, "%d", tree->child[0]->attr.val);
+  }
+
+  fprintf(code, " * 4 \n");
+  printSubRoutine();
+  fprintf(code, "%3d: %s[t%d] = ", emitLoc++, tree->attr.name, registerNumber);
+  registerNumber++;
   if (highEmitLoc < emitLoc)
     highEmitLoc = emitLoc;
 }

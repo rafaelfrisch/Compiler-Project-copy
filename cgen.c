@@ -174,7 +174,7 @@ static void genStmt(TreeNode *tree)
     cGen(p2);
 
     emitDeviation();
-  
+
     if (TraceCode)
       emitCommentWithLine("<- if", tree->lineno);
     break; /* if_k */
@@ -206,7 +206,7 @@ static void genStmt(TreeNode *tree)
     }
     fprintf(code, "\n");
     emitWhile();
-    
+
     p2 = tree->child[1];
     cGen(p2);
     emitEndWhile();
@@ -222,7 +222,14 @@ static void genStmt(TreeNode *tree)
     firstRegister = cGenAssign(p1);
     secondRegister = cGenAssign(p2);
     emitAssign();
-    fprintf(code, "%s = ", tree->attr.name);
+    if (tree->child[0]->child[0] != NULL)
+    {
+      emitArrayAssign(p1);
+    }
+    else
+    {
+      fprintf(code, "%s = ", tree->attr.name);
+    }
     if (firstRegister == secondRegister)
     {
       if (p2->kind.exp == IdK)
