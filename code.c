@@ -409,7 +409,8 @@ int printNumParams(TreeNode *tree)
   p = tree->child[0];
   while (p != NULL && (p->kind.stmt == IdK))
   {
-    fprintf(code, "param %s\n", p->attr.name);
+    printSubRoutine();
+    fprintf(code, "%3d: param %s\n", emitLoc++, p->attr.name);
 
     p = p->sibling;
     numParams++;
