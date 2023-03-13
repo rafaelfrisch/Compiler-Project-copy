@@ -1,49 +1,12 @@
 # Compiler-Project
 
-## Lexical Analyser
+## Run project
 Run this command:
 
 ```
-./lexicalanalyser.sh
+./codegenerator.sh
 ```
 
-Results will be stored on results folder
+Results will be stored on results folder, with intermediate code and printedResults
 
-
-Or run each compiled file separately:
-### Generate Flex
-
-```
-flex cminus.l
-```
-
-### Generate .o files
-
-```
-gcc -c lex.yy.c main.c util.c
-```
-
-### Create Lexical Analyser:
-
-```
-gcc -o cminus *.o -ll
-```
-
-### Run test Programs
-
-```
-mkdir -p results
-./cminus testfiles/mdc.c > results/mdc.txt
-./cminus testfiles/sort.c > results/sort.txt
-```
-Results will be stored on results folder
-
-## syntatic analyser
-```
-./syntaticanalyser.sh
-```
-
-## semantic analyser
-```
-./semanticanalyser.sh
-```
+To adjust what is printed on the txt file, change tracing flags on main.c
